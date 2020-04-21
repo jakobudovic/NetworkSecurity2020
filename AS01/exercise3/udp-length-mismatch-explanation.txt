@@ -1,0 +1,17 @@
+The actual data, we get back is LARGER than the data_length variable we get from parse_udp() function.
+
+The difference is 8 Bytes always, which we can also see in the wireshark, see screenshot - length.png.
+We can see there, that Data is 7B long but lenght that we see (also highlighted) on the picture
+is 15B. Those 8B of difference are meant for the header of the UDP payload. 
+Together they combine in 15B.
+
+" Length is the length in octets of this user datagram including this
+header and the data. (This means the minimum value of the length is
+eight.)"
+- source: RFC (https://www.ietf.org/rfc/rfc768.txt)
+
+Why is minimum value 8B? Because we could send 0B of data but we should still include the header
+of the UDP datagram, consisting of Source and destination ports, Length and checkum.
+
+
+
