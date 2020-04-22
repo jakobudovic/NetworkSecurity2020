@@ -3,6 +3,7 @@
 import socket
 import struct
 import sys
+import ipaddress as ip
 
 def int_to_mac(macint):
 	# source: https://gist.github.com/nlm/9ec20c78c4881cf23ed132ae59570340
@@ -22,9 +23,9 @@ def parse_ethernet(packet):
 	typeCode = tag1
 	if tag1 == 0x81 and tag2 == 0x00:
 		typeCode = typ # present tag, read from bytes 17 and 18
-		data = packet[18:]
+		data = packet[16:]
 	else:
-		data = packet[12:]
+		data = packet[14:]
 
 	macD = int_to_mac(int(str(eda) + str(ed)))
 	macS = int_to_mac(int(str(es) + str(esa)))
@@ -40,11 +41,17 @@ def parse_ip(packet):
 	header = packet[:header_length_in_bytes]
 	data = packet[header_length_in_bytes:]
 
-	_, totalLength, _, _, protocol, _, source, destination  = struct.unpack_from("!HHLBBH4s4s", header, offset=0)
+	_, _, totalLength, _, _, protocol, _, source, destination  = struct.unpack_from("!BBHLBBHLL", header) # HHLBBH4s4s
 	# print("protocol: ", protocol)
-	sourceIP = socket.inet_ntoa(source)
-	destIP = socket.inet_ntoa(destination)	
+	
+	# i would need bytes here:
+	# sourceIP = socket.inet_ntoa(source)
+	# destIP = socket.inet_ntoa(destination)	
 
+	# integer version:
+	sourceIP = ip.IPv4Address(source)
+	destIP = ip.IPv4Address(destination)
+	
 	return header_length_in_bytes, totalLength, protocol, sourceIP, destIP, data
 
 
@@ -66,36 +73,28 @@ def main():
 		
 		ethDest, ethSource, ethType, dataFromETH = parse_ethernet(data)
 
-		if ethType != 0x800:	# check if it's an IP type code, skip if it's not
-			print("Not an IP data, ethType:", hex(ethType))
-			continue
-		else: 
-			print("IP data")
-			# print(dataFromETH, "\n")
+		if ethType == 0x800:	# check if it's an IP type code, skip if it's not
+			headerLenIP, totalLength, protocol, sourceIP, destinationIP, dataFromIP = parse_ip(dataFromETH)
+		
+			# check if it's a UDP protocol packet, 17
+			# print("packet has protocol: ", protocol)
+			if protocol == 17:
 
-		headerLenIP, totalLength, protocol, sourceIP, destinationIP, dataFromIP = parse_ip(dataFromETH)
-		
-		# check if it's a UDP protocol packet, 17
-		if protocol != 17:
-			print("Not an UDP packet, protocol:", protocol)
-			# print(dataFromIP, "\n")
-			# continue
-		else: 
-			print("UDP packet ----------------------------------------- !!!")
-		
-		sourcePort, destPort, dataLen, checksum, dataFromUDP = parse_udp(dataFromIP)
-		# print(dataFromUDP, "\n")
-		
+				sourcePort, destPort, dataLen, checksum, dataFromUDP = parse_udp(dataFromIP)
+				# print(dataFromUDP, "\n")
+			
 
-		print("Ethernet source: {}\nEthernet destination: {}\n"
-				"IP header length: {}\nIP total length: {}\n"
-				"IP protocol: {}\nIP source: {}\n"
-				"IP destination: {}\n"
-				"UDP source port: {}\nUDP destination port: {}\n"
-				"UDP payload length: {}\n\nData: {}\n".format(
-				ethSource, ethDest, headerLenIP, totalLength, 
-				protocol, sourceIP, destinationIP, 
-				sourcePort, destPort, dataLen, struct.unpack('f', dataFromUDP)))
+				print("Ethernet source: {}\nEthernet destination: {}\n"
+					"IP header length: {}\nIP total length: {}\n"
+					"IP protocol: {}\nIP source: {}\n"
+					"IP destination: {}\n"
+					"UDP source port: {}\nUDP destination port: {}\n"
+					"UDP payload length: {}\n\n".format(
+					ethSource, ethDest, headerLenIP, totalLength, 
+					protocol, sourceIP, destinationIP, 
+					sourcePort, destPort, dataLen))
+				
+				print("Data: {}\n\n".format(dataFromUDP))
 		
 
 if __name__ == "__main__":
