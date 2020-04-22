@@ -1,0 +1,77 @@
+
+2.
+
+a)
+I see wireless data, WLAN connections/protocol.
+IP/TCP isn't visible because we are looking at the traffic of the wireless connections.
+
+b)
+The most active is of course WLAN Traffic.
+Network name: netsec-wep
+node 00:0f:c9:0c:f7:8c is the access point, since it has the most data going through it (99,8%).
+
+c)
+?
+
+d)
+I think laptops since students are not allowed to use phones during practical this capture was taken.
+
+e)
+~$ aircrack-ng -a 1 outputnetsec-01.cap
+   
+                                      Aircrack-ng 1.6 
+
+
+                        [00:00:05] Tested 1535537 keys (got 76687 IVs)
+
+   KB    depth   byte(vote)
+    0    0/  1   C0(112640) F0(87808) 94(87296) F7(87296) 75(86784) 32(86528) 
+    1    0/  1   FF(97536) 7B(89856) DF(89856) E8(89344) 96(88320) 1F(87552) 
+    2    0/  1   EE(110592) A7(90112) 5E(88064) 13(87296) BA(86272) 4E(86016) 
+    3    0/  1   42(106496) 71(88576) B2(88320) 10(88064) 57(87808) 9B(87296) 
+    4    0/  1   21(106496) 49(88064) 31(87808) 5D(87296) 3B(86784) F9(86784) 
+    5    0/  1   61(99584) CE(88576) 3E(87040) B1(87040) 26(86784) DE(85760) 
+    6    0/  6   70(89856) 03(86784) D5(86528) 0E(86016) 86(86016) 8B(85504) 
+    7    0/  1   4A(106496) 37(89856) D6(88320) 65(87296) 69(85504) 85(85504) 
+    8    0/  1   1A(104448) D4(88064) 02(86528) 85(86528) 3E(86272) 5A(86272) 
+    9    0/  1   44(95744) FB(87296) 4B(86784) D9(86528) 75(86016) 69(85504) 
+   10    0/  1   E7(88832) 7A(87040) 13(86784) 15(86528) FD(86272) 8F(86016) 
+   11    1/  1   AF(86528) 00(86016) 4A(85760) 3B(85504) CA(85248) E8(84736) 
+   12    0/  1   20(101408) 86(90476) 2F(86676) 0C(86520) 99(86108) A8(85712) 
+
+             KEY FOUND! [ C0:FF:EE:42:21:61:1E:4A:1A:44:6E:2F:20 ] 
+        Decrypted correctly: 100%
+
+- key: C0:FF:EE:42:21:61:1E:4A:1A:44:6E:2F:20
+
+f)
+~$ airdecap-ng outputnetsec-01.cap -w C0:FF:EE:42:21:61:1E:4A:1A:44:6E:2F:20
+
+g)
+I can see a lot of TCP traffic, which was before not present. 
+At some point there's also a lot of ARP requests, which is fishy. Around time of 40 seconds (39.5s)
+
+h)
+after opening statistics > protocol hierarchy, I can see that communication here is done on ethernet level.
+We can't see any WLAN traffic in the Wireless > WLAN Traffic.
+However, after opening endpoints and communication we can see something happening.
+We see 3 endpoints, 2 of which have almost the same MAC address.
+Communication is done via ethernet with ipv4 protocol at internet layer and TCP as well as UDP protocols at transport layer.
+
+Communication goes between these 3 devices (3 types of communications):
+00:0f:c9:0c:ee:ed <-> 00:0f:c9:0c:f7:8c
+00:0f:c9:0c:f7:8c <-> c4:e9:84:d7:70:67
+00:0f:c9:0c:ee:ed <-> c4:e9:84:d7:70:67
+
+Which is same as (in name format):
+Allnet_0c:ee:ed <-> Allnet_0c:f7:8c
+Allnet_0c:f7:8c <-> Tp-LinkT_d7:70:67
+Allnet_0c:ee:ed <-> Tp-LinkT_d7:70:67
+
+And also with IP addressess (same order!):
+192.168.84.41 <-> 192.168.84.61
+192.168.84.21 <-> 192.168.84.61
+192.168.84.21 <-> 192.168.84.41
+
+h)
+
