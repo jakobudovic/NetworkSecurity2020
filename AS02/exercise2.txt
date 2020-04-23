@@ -59,6 +59,11 @@ We see 3 endpoints, 2 of which have almost the same MAC address.
 Communication is done via ethernet with ipv4 protocol at internet layer and TCP as well as UDP protocols at transport layer.
 
 Communication goes between these 3 devices (3 types of communications):
+Num of packets in conversations:
+1. 38.076
+2. 27.155
+3. 127
+
 00:0f:c9:0c:ee:ed <-> 00:0f:c9:0c:f7:8c
 00:0f:c9:0c:f7:8c <-> c4:e9:84:d7:70:67
 00:0f:c9:0c:ee:ed <-> c4:e9:84:d7:70:67
@@ -73,5 +78,29 @@ And also with IP addressess (same order!):
 192.168.84.21 <-> 192.168.84.61
 192.168.84.21 <-> 192.168.84.41
 
-h)
+Devices with MAC addresses use corresponding IPs:
+Allnet_0c:ee:ed -> 192.168.84.41 AND 192.168.84.21
+Allnet_0c:f7:8c -> 192.168.84.21 AND 192.168.84.61
+Tp-LinkT_d7:70:67 -> 192.168.84.41 AND 192.168.84.61
+
+I don't really see what's going on here, probably some man in the middle stuff,
+since there's devices using eachothers IPs.
+
+i)
+1.
+At 14:47, 19:47 and 74.5 timestamps the conversation with the most traffic has some interesting UDP messages 
+(see conversation1_udp.png picture)
+192.168.84.41-61 basically send UDP messages for recipients to insert their student numbers on XXXXXXX placeholders.
+My guess is they had to edit content of the packets with replacing these fields with s. numbers and sending them to desired address.
+If i add/apply the udp filter with "&& udp" to this conversation, i can see all the UDP traffic with this same message. (studentnumber_udp.png)
+
+By applying the same filter on the second conversation, i can see similar traffic with UDP protocol (conversation2_udp.png)
+
+At the third conversation is not that interesting to me, it's also significantly smaller than previous 2.
+We have some TCP traffic and ICMP pings. That is more or less it. (conversation3.png) 
+
+j)
+
+
+k)
 
