@@ -1,0 +1,61 @@
+a)
+$ sudo arpspoof -i eth1 172.21.152.1
+8:0:27:df:9:84 ff:ff:ff:ff:ff:ff 0806 42: arp reply 172.21.152.1 is-at 8:0:27:df:9:84
+8:0:27:df:9:84 ff:ff:ff:ff:ff:ff 0806 42: arp reply 172.21.152.1 is-at 8:0:27:df:9:84
+8:0:27:df:9:84 ff:ff:ff:ff:ff:ff 0806 42: arp reply 172.21.152.1 is-at 8:0:27:df:9:84
+...
+
+After opening statistic > endpoints, I could see different node on the LAN.
+There were 4 of them:
+08:00:27:62:02:ee (PcsCompu_62:02:ee)
+08:00:27:66:17:ab (PcsCompu_66:17:ab)
+08:00:27:df:09:84 (PcsCompu_df:09:84)
+ff:ff:ff:ff:ff:ff (broadcast)
+
+We have 3 actual endpoints and 1 broadcast value.
+
+After inspecting the conversations pannel, I noticed this:
+PcsCompu_62:02:ee -> PcsCompu_df:09:84
+PcsCompu_66:17:ab -> PcsCompu_df:09:84
+PcsCompu_62:02:ee -> broadcast
+PcsCompu_66:17:ab -> broadcast
+PcsCompu_df:09:84 -> broadcast
+
+I would say that we have 3 devices on this network.
+PcsCompu_62:02:ee, PcsCompu_66:17:ab and PcsCompu_df:09:84.
+Each conversation is done either to a broadcast address or to a device PcsCompu_df:09:84.
+That's why I think the host we're redirecting packets to is PcsCompu_df:09:84
+
+
+b)
+Arpspoof intercepts packets on a switched LAN.
+It redirects packets from a target host(s) on the LAN to another host, by forging ARP replies.
+Sniffing traffic on a switch.
+Kernel IP forwarding must be turned ON beforehand.
+
+sudo arpspoof -i eth1 172.21.152.1
+
+sudo - root rights
+-i - interface mode, specify the interface to use
+eth1 - interface we use
+172.21.152.1 - this is the host we wish to intercept packets for (usually it's the local gateway)
+
+Because we didn't use the -t tag to specify a particular host to ARP poison, all hosts on the LAN are targets.
+
+c) 
+because we would need to specify the "-r" flag/option in order to poison bost hosts, to capture the 
+traffic in BOTH directions.
+But if we wanted to use this option, we would also need to explicitlz set up the target with "-t" option.
+
+d)
+After looking into converstions, I am able to see 1 TCP conversation going from 
+from 172.21.152.44 to 172.21.152.1 (gateway). 
+I am unable to see what's on the other side of the gateway. 
+In the IPv4 pannel I can see arriving packets FROM the gateway to our LAN, to the addresses 
+172.21.152.44 and 172.21.152.79, which are in the same network.
+Those same addresses/devices are sending their packets to the gateway, meaning, they perform communication with devices in another network.
+We don't see the final destination address (yet).
+
+e)
+Nmap and Netdiscover
+
