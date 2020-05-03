@@ -1,0 +1,10 @@
+I was scrolling through the traffic between 
+Allnet_0c:f7:8c and Tp-LinkT_d7:70:67 and saw some big chungs of UDP packets.
+After inspecting the contents of them I realised thez include an interesting text:
+
+"Insert your student numbers in the following places. Do not change thepacket length. 
+Leave superfluous letters as padding..Student 1:XXXXXXXXXXXX.Student 2: YYYYYYYYYYYY.Student 3:ZZZZZZZZZZZZ."
+
+
+
+

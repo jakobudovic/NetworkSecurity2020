@@ -7,14 +7,24 @@ IP/TCP isn't visible because we are looking at the traffic of the wireless conne
 
 b)
 The most active is of course WLAN Traffic.
-Network name: netsec-wep
+Network name SSID: netsec-wep
 node 00:0f:c9:0c:f7:8c is the access point, since it has the most data going through it (99,8%).
+
+We see the most traffic on 
+00:0f:c9:0c:f7:8c aka Allnet_0c:f7:8c, 
+00:0f:c9:0c:ee:ed aka Allnet_0c:ee:ed, and
+c4:e9:84:d7:70:67 aka Tp-LinkT_d7:70:67
+
+The first two could be devices and the last one could be a router.
+
+
 
 c)
 ?
 
 d)
 I think laptops since students are not allowed to use phones during practical this capture was taken.
+However I saw apple, xiaomi aswell so my guess is they used some phones.
 
 e)
 ~$ aircrack-ng -a 1 outputnetsec-01.cap
@@ -99,8 +109,23 @@ By applying the same filter on the second conversation, i can see similar traffi
 At the third conversation is not that interesting to me, it's also significantly smaller than previous 2.
 We have some TCP traffic and ICMP pings. That is more or less it. (conversation3.png) 
 
+2. Allnet_0c:f7:8c and Tp-LinkT_d7:70:67
+Here, Allnet_0c:f7:8c is sending occasionally UDP packets from IPs 192.168.84.61 - 192.168.84.80 to the addresses: 192.168.84.21 - 192.168.84.40
+With the message:
+Insert your student numbers in the following places. Do not change thepacket length. Leave superfluous letters as padding..Student 1:XXXXXXXXXXXX.Student 2: YYYYYYYYYYYY.Student 3:ZZZZZZZZZZZZ.
+In the same direction go some pings to which we do not get responses.
+
+3. 
+This communication is done between Allnet_0c:ee:ed (ip-> 41) and Tp-LinkT_d7:70:67 (ip-> 21).
+The first device is probably some user's computer and since I have a router from company Tp-Link I assume, it's just that.
+After applzing the filters, I can see that  Tp-link is pinging Allnet.
+And after reversing the filter I can see that Allnet is replying.
+
+
+
 j)
 
 
 k)
 
+¸
