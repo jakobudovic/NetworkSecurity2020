@@ -32,10 +32,8 @@ We are sending packets back from 101 to 20 with ICMP protocol. The original mess
 src and dst MAC and IPs untouched. 
 This is then sent from 20 to 10.
 
+For IP routing you need to change MACs not IPs. 
+I changed mac src from ee to 84 and the destination from 84 to ab.
 
-
-
-172.21.153.20 -> 172.21.152.101 -> 172.21.153.20 -> 172.21.153.10
-
-172.21.153.20 -> 172.21.153.10
-172.21.153.20 -> 172.21.153.10
+I don't even want to say how many hours I spent on this assignment, whole tuesday AND holidays... 
+At least it's finished, thanks to the lecturer. 
