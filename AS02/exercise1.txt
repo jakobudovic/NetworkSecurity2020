@@ -46,3 +46,5 @@ Essentially four problems with WPA2:
 So, when the attacker obtains the public key, he can track, see and monitor everything. 
 Strong passwords are therefore recommended (15+ random characters).
 
+Brute forcing anz WPA password takes roughly 4h, since there is 11000 possibilities.
+Pin is long 8 digits.

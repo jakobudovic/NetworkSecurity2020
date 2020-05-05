@@ -124,8 +124,7 @@ And after reversing the filter I can see that Allnet is replying.
 
 
 j)
-
-
-k)
+eth.addr==08:00:27:66:17:ab && eth.addr==08:00:27:df:09:84 && arp
+I only see arp requests from 08:00:27:66:17:ab, no replies from 08:00:27:df:09:84
 
 ¸
