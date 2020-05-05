@@ -30,6 +30,8 @@ That's why I think the host we're redirecting packets to is PcsCompu_df:09:84
 When the command "sudo arpspoof -i eth1 172.21.152.1" is run from terminal, we can see a lot of arp broadcast packets.
 I applied "arp" filter for easier readability. The bodz contains sender's ip field with value: 172.21.152.1 
 
+filter applied:
+((((!(frame.len == 54)) && !(frame.len == 605)) && !(ip.dst == 172.21.152.101)) && !(ip.dst == 40.77.226.250)) && !(ip.src == 172.21.152.101)
 
 b)
 Arpspoof intercepts packets on a switched LAN.
@@ -59,9 +61,40 @@ from 172.21.152.44 to 172.21.152.1 (gateway).
 I am unable to see what's on the other side of the gateway. 
 In the IPv4 pannel I can see arriving packets FROM the gateway to our LAN, to the addresses 
 172.21.152.44 and 172.21.152.79, which are in the same network.
-Those same addresses/devices are sending their packets to the gateway, meaning, they perform communication with devices in another network.
+
+Those same addresses/devices are sending their packets to the gateway, meaning, they perform communication with devices in another network?
 We don't see the final destination address (yet).
+
+
 
 e)
 Nmap and Netdiscover
+
+
+kali@netsec-kali:~$ sudo nmap -sn 172.21.152.0/23
+[sudo] password for kali:                                                                   
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-05 16:53 CEST                                  
+Nmap scan report for 172.21.152.1                                                                 
+Host is up (0.00025s latency).                                                                    
+MAC Address: 08:00:27:AB:03:CB (Oracle VirtualBox virtual NIC)                                       
+Nmap scan report for 172.21.152.44                                                                   
+Host is up (0.00059s latency).                                                                         
+MAC Address: 08:00:27:66:17:AB (Oracle VirtualBox virtual NIC)
+Nmap scan report for 172.21.152.79
+Host is up (0.00063s latency).
+MAC Address: 08:00:27:62:02:EE (Oracle VirtualBox virtual NIC)
+Nmap scan report for 172.21.152.255
+Host is up (0.00044s latency).
+MAC Address: 08:00:27:62:02:EE (Oracle VirtualBox virtual NIC)
+Nmap scan report for 172.21.153.10
+Host is up (0.00048s latency).
+MAC Address: 08:00:27:66:17:AB (Oracle VirtualBox virtual NIC)
+Nmap scan report for 172.21.153.20
+Host is up (0.00037s latency).
+MAC Address: 08:00:27:62:02:EE (Oracle VirtualBox virtual NIC)
+Nmap scan report for 172.21.153.135
+Host is up (0.00031s latency).
+MAC Address: 08:00:27:66:17:AB (Oracle VirtualBox virtual NIC)
+Nmap scan report for 172.21.152.101
+Host is up.
 

@@ -127,4 +127,30 @@ j)
 eth.addr==08:00:27:66:17:ab && eth.addr==08:00:27:df:09:84 && arp
 I only see arp requests from 08:00:27:66:17:ab, no replies from 08:00:27:df:09:84
 
-¸
+I see now that i applied the filter: tcp.flags.reset==1
+192.168.84.21 is sending RST messages to 192.168.84.41
+192.168.84.41 is being rejected.
+
+Filter: 
+(ip.src==192.168.84.41 && ip.dst==192.168.84.21) || (ip.src==192.168.84.21 && ip.dst==192.168.84.41)
+
+Rejected: 192.168.84.41     is   Allnet_0c:ee:ed
+Rejecting: 192.168.84.21    is   Allnet_0c:70:67
+
+k)
+The rest of the communications (2) are interesting because they are sending text about student numbers.
+
+The communication is between:
+00:0f:c9:0c:f7:8c and c4:e9:84:d7:70:67
+allnet and tp link
+
+and 
+
+00:0f:c9:0c:f7:8c and 00:0f:c9:0c:ee:ed 
+allnet and tp link
+
+.
+
+Connection getting rejected: 
+00:0f:c9:0c:ee:ed and c4:e9:84:d7:70:67
+allnet and tp link
