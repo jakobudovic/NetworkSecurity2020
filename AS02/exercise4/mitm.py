@@ -12,7 +12,8 @@ import struct
 
 def main():
     s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
-    # s.bind(("interface", 0))
+    s.bind(("eth1", 0))
+    
     while True:
         frame, source = s.recvfrom(65565)
         eth_src, eth_dst, eth_type, eth_payload = parse_ethernet(frame)
