@@ -65,6 +65,12 @@ SYN would go from Malory to Alice with Bob's IP source address.
 Alice would receive the SYN, save it in queue and send back the ACK to the sender's IP, which is Bob.  
 Therefore Malory does not get the SYN ACK with ACK number and can only guess it in order to create a valid ACK. 
 
+Bob sends the RST (RCF page 36):
+" There are three groups of states:  
+1.  If the connection does not exist (CLOSED) then a reset is sent in response to any incoming segment except another reset.  In particular, SYNs addressed to a non-existent connection are rejected
+    by this means.
+"
+
 <center>
 <img src="syn_handshake.png">
 </center>
@@ -80,10 +86,12 @@ So the first part applies to our situation because the host (Ursula) is not reac
 "The Internet Protocol is not designed to be absolutely reliable.  The purpose of these control messages is to provide feedback about problems in the communication environment, not to make IP reliable. Some datagrams may still be undelivered without any report of their loss."
 
 "**Destination Address** - 
-The address of the gateway or host to which the message should be sent.
-"
+The address of the gateway or host to which the message should be sent."
 
 "If, in the destination host, the IP module cannot deliver the datagram  because the indicated protocol module or process port is not active, the destination host may send a destination unreachable message to the source host."
+
+So the ICMP takes care of the host unreachable message. If the Ursula can send it, she will but otherwise the gateway will try to reach her with ARP requests on which it will not recieve an answer and therefore send Alice the "host unreachable message".  
+The attack stops there, Alice (server) drops the connection. 
 
 ### e)
 If they are in the same Network, Mallory could just use ARP spoofing to do the flood attack against Alice.
