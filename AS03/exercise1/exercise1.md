@@ -1,4 +1,3 @@
-
 # Assignment 3
 
 ## Exercise 1
@@ -92,10 +91,11 @@ The address of the gateway or host to which the message should be sent."
 
 So the ICMP takes care of the host unreachable message. If the Ursula can send it, she will but otherwise the gateway will try to reach her with ARP requests on which it will not recieve an answer and therefore send Alice the "host unreachable message".  
 The attack stops there, Alice (server) drops the connection. 
+(1:37:00 [Lecture3](https://youtu.be/Xhm-NWz8kVY?t=5820))
 
 ### e)
 If they are in the same Network, Mallory could just use ARP spoofing to do the flood attack against Alice.
 If you are in the same broadcast domain, I could just ARP-spoof Bob or the router of Bob and Alice.
-(1:09:40 [lecture3](https://youtu.be/Xhm-NWz8kVY?t=4180))
+(1:09:40 [Lecture3](https://youtu.be/Xhm-NWz8kVY?t=4180))
 
 
