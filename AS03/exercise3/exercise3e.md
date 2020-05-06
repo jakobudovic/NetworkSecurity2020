@@ -116,6 +116,9 @@ The scan time reduced from 7s to 5s.
 
 
 
-```
+## Exercise 3h
 
-```
+Why should we write our answer for 3h under Exercise3e?  
+Hmm this is suspicious...  
+
+Anyway, I think I would focus on ssh port, like all hackers do, but I also think this can be done via UDP port, hence hte instruction to write our answer here.
