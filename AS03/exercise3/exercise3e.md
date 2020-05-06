@@ -3,14 +3,14 @@
 ## Exercise 3e
 
 from the documentation of nmap:
-```js
+```console
 -sU (UDP scans)
 While most popular services on the Internet run over the TCP protocol, UDP[6] services are widely
 deployed. DNS, SNMP, and DHCP (registered ports 53, 161/162, and 67/68) are three of the most common.
 ```
 As we can see, we are provided with the most common UDP ports. That's what I will scan:
 
-```js
+```console
 kali@netsec-kali:~$ sudo nmap -p 53,161,162,67,68 -sU 172.21.152.101/23
 Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-06 16:40 CEST
 Nmap scan report for 172.21.152.1

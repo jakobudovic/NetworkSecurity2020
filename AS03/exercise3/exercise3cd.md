@@ -8,7 +8,7 @@ For the TCP ports I could use
 
 With flag "-p 1-65535" you scan all the ports but it takes 10 times as much time as without it, where it scans 1000 **most commonly used** ports.
 
-```js
+```console
 kali@netsec-kali:~$ nmap -p 1-65535 172.21.152.101/23
 Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-06 15:58 CEST
 Nmap scan report for 172.21.152.1
@@ -73,7 +73,7 @@ Nmap done: 512 IP addresses (8 hosts up) scanned in 48.02 seconds
 
 For the TCP ports I used flag "-sT"
 
-```js
+```console
 kali@netsec-kali:~$ nmap -p 1-65535 -sT 172.21.152.101/23
 Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-06 16:19 CEST
 Nmap scan report for 172.21.152.1
@@ -136,7 +136,7 @@ Nmap done: 512 IP addresses (8 hosts up) scanned in 42.94 seconds
 
 Here I got 2 different answers by adding the -p flag. Without it I wouldn't discover the following:
 
-```js 
+```console 
 Nmap scan report for 172.21.152.101	
 Host is up (0.0021s latency).	
 Not shown: 65534 closed ports	
@@ -144,7 +144,7 @@ PORT     STATE SERVICE
 1716/tcp open  xmsg
 ```
 and
-```js
+```console
 Nmap scan report for 172.21.153.10	
 Host is up (0.0016s latency).	
 Not shown: 65533 closed ports	
@@ -155,7 +155,7 @@ PORT      STATE SERVICE
 
 because I would just get something like: 
 
-```js
+```console
 Nmap scan report for 172.21.153.10
 Host is up (0.0016s latency).
 All 1000 scanned ports on 172.21.153.10 are closed
@@ -180,7 +180,7 @@ Other possibilities:
 
 ## Exercise 3d
 I already got the port 172.21.153.10:2222 as well as :16765
-```js
+```console
 PORT      STATE SERVICE	
 22222/tcp open  easyengine
 16765/tcp open  unknown	

@@ -39,7 +39,7 @@ PORT SPECIFICATION AND SCAN ORDER:
 
 1. I checked what interfaces I have on my kali machine with `$ ip a` command. After seeing loopback, eth0 and eth1 i checked what ip corresponds to eth1 and used that for host discovery:
 
-```js
+```console
 kali@netsec-kali:~$ ip addr show
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -62,7 +62,7 @@ kali@netsec-kali:~$ ip addr show
 ```
 
 2. I then used the ip `172.21.152.101/23` to discover hosts
-```js
+```console
 kali@netsec-kali:~$ nmap -sn 172.21.152.101/23
 Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-06 15:45 CEST
 Nmap scan report for 172.21.152.1
@@ -88,7 +88,7 @@ Nmap done: 512 IP addresses (8 hosts up) scanned in 3.13 seconds
 
 IPs 10, 20 and 135 above are all up because I got the reply back. 
 1, 44, 79 and 101 are not available, 255 is broadcast.
-```js
+```console
 kali@netsec-kali:~$ ping 172.21.153.79
 PING 172.21.153.79 (172.21.153.79) 56(84) bytes of data.
 From 172.21.152.101 icmp_seq=1 Destination Host Unreachable
