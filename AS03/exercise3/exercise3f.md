@@ -14,10 +14,6 @@ I could also use `netstat` for serivce seek with `ss -tl`
 **`ss -tlnp`** - processing output
 
 [1:26:00 Lecture 3 - version detection and services with netstsat (ss)](https://youtu.be/Xhm-NWz8kVY?t=5158) 
-```dos
-foo@bar:~$ whoami
-foo
-```
 
 
 ```console
@@ -517,12 +513,91 @@ OS details: Linux 2.6.32
 Network Distance: 0 hops
 ```
 
+---
+
+A few days have passed and I tried to restart the machines again. I scanned the ports and finally got a bit more promising result:
+
+```bash
+kali@netsec-kali:~$ sudo nmap -sV 172.21.152.101/23
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-08 21:34 CEST
+Nmap scan report for 172.21.152.1
+Host is up (0.00019s latency).
+Not shown: 994 closed ports
+PORT    STATE    SERVICE VERSION
+21/tcp  open     ftp     Pure-FTPd
+22/tcp  open     ssh     OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+80/tcp  open     http    nginx 1.14.2
+512/tcp filtered exec
+513/tcp filtered login
+514/tcp filtered shell
+MAC Address: 08:00:27:AB:03:CB (Oracle VirtualBox virtual NIC)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Nmap scan report for 172.21.152.44
+Host is up (0.00028s latency).
+Not shown: 997 closed ports
+PORT    STATE SERVICE    VERSION
+25/tcp  open  smtp       Postfix smtpd
+143/tcp open  tcpwrapped
+993/tcp open  tcpwrapped
+MAC Address: 08:00:27:66:17:AB (Oracle VirtualBox virtual NIC)
+Service Info: Host:  netsec-peer1.octopus.localdomain
+
+Nmap scan report for 172.21.152.79
+Host is up (0.00026s latency).
+Not shown: 996 closed ports
+PORT     STATE SERVICE         VERSION
+79/tcp   open  finger?
+443/tcp  open  ssh             OpenSSH 7.9p1 Debian 10+deb10u2 (protocol 2.0)
+4242/tcp open  vrml-multi-use?
+9100/tcp open  jetdirect?
+MAC Address: 08:00:27:62:02:EE (Oracle VirtualBox virtual NIC)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Nmap scan report for 172.21.152.255
+Host is up (0.00023s latency).
+All 1000 scanned ports on 172.21.152.255 are closed
+MAC Address: 08:00:27:62:02:EE (Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 172.21.153.10
+Host is up (0.00033s latency).
+All 1000 scanned ports on 172.21.153.10 are closed
+MAC Address: 08:00:27:66:17:AB (Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 172.21.153.20
+Host is up (0.00026s latency).
+All 1000 scanned ports on 172.21.153.20 are closed
+MAC Address: 08:00:27:62:02:EE (Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 172.21.153.135
+Host is up (0.00030s latency).
+Not shown: 997 closed ports
+PORT    STATE SERVICE VERSION
+512/tcp open  exec    netkit-rsh rexecd
+513/tcp open  login?
+514/tcp open  shell   Netkit rshd
+MAC Address: 08:00:27:66:17:AB (Oracle VirtualBox virtual NIC)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Nmap scan report for 172.21.152.101
+Host is up (0.0000060s latency).
+All 1000 scanned ports on 172.21.152.101 are closed
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 512 IP addresses (8 hosts up) scanned in 161.34 seconds
+```
+
+Somehow now all the ports on the 101 machine were closed (?) but I got the info about other machines; 10, 20 etc, which were all Oracle VM machines,  mostly with Ubuntu Linux kernel running. 
 
 
+After all that I also decided to try out the "Zombie scan" which sounded very interesting to me.  
+For the device I used my rpi4 with static IP 192.168.0.110.  
+For that I needed to add the flag `-sI`.
 
 ```console
 
 ```
+
 
 
 <center>

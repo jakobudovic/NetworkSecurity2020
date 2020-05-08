@@ -11,7 +11,7 @@ deployed. DNS, SNMP, and DHCP (registered ports 53, 161/162, and 67/68) are thre
 As we can see, we are provided with the most common UDP ports. That's what I will scan:
 
 ```console
-kali@netsec-kali:~$ sudo nmap -p 53,161,162,67,68 -sU 172.21.152.101/23
+kali@netsec-kali:~$ sudo nmap -p 53,161,162,67,68 -sU 172.21.152.1o01/23
 Starting Nmap 7.80 ( https://nmap.org ) at 2020-05-06 16:40 CEST
 Nmap scan report for 172.21.152.1
 Host is up (0.00052s latency).
