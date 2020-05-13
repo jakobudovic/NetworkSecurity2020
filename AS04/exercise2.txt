@@ -1,0 +1,21 @@
+-r [USERNAME@]ADDR[:PORT], --remote [USERNAME@]ADDR[:PORT]
+                        ssh hostname (and optional username) of remote
+                        sshuttle server
+
+<username>@lilo.science.ru.nl
+
+sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+
+
+err1:
+root@netsec-kali:~# sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+judovic@lilo.science.ru.nl's password: 
+Permission denied, please try again.
+
+
+err2:
+root@netsec-kali:~# sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+ssh: connect to host lilo.science.ru.nl port 22: Connection refused
+client: fatal: failed to establish ssh session (2)
+
+

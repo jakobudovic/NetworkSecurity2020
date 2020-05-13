@@ -1,0 +1,19 @@
+1.
+iptables -vnL
+iptables -L
+a)
+
+All outgoing traffic (command not needed)
+iptables -I OUTPUT -o eth0 -d 0.0.0.0/0 -j ACCEPT
+
+All incoming established and RELATED traffic:
+iptables -I INPUT -i eth0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+All incoming ssh traffic based on transport protocol and port
+sudo iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+All incoming ICMP except redirect (lecture 1:12:00), not needed
+iptables -A INPUT -p icmp -j ACCEPT
+
+Block icmp redirects: (types icmp: ), source: https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=2ahUKEwig7_HrtLDpAhXBMewKHasxDdAQFjAAegQIAxAB&url=http%3A%2F%2Fblog.iopsl.com%2Fdrop-icmp-redirects-to-avoid-network-issues-in-some-cases%2F&usg=AOvVaw2FekDLzoe2p1790BEbBmeK
+iptables -I INPUT -p icmp --icmp-type 5 -j DROP
