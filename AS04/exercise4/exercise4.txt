@@ -1,0 +1,34 @@
+NAT RFC: http://tools.ietf.org/rfc/rfc5508.txt
+
+ICMP Error messages provide signaling for IP.
+All ICMP Error messages are characterized by the fact that they
+embed the original datagram that triggered the ICMP Error message.
+The original datagram embedded within the ICMP Error payload is
+also referred to as the "Embedded packet" throughout the document.
+Unlike ICMP Query messages, ICMP Error messages do not have a Query
+Id in the ICMP header.
+
+Basically error message is just the same message that triggered the error, stored in another header.
+
+a)
+
+
+
+b)
+When an ICMP Error packet is received, if the
+ICMP checksum fails to validate, the NAT SHOULD silently drop the
+ICMP Error packet.  This is because NAT uses the embedded IP and
+transport headers for forwarding and translating the ICMP Error
+message (described in Section 4.2).  When the ICMP checksum is
+invalid, the embedded IP and transport headers, which are covered by
+the ICMP checksum, are also suspect.
+
+
+c)
+
+
+
+d)
+
+
+

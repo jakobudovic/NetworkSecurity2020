@@ -1,0 +1,57 @@
+a)
+The traffic goes to default which is 0.0.0.0/0.
+
+It's the only option that is more "generic" than 1,2 and 7.
+
+b)
+
+10.0.0.0/8
+172.16.0.0/12
+and
+192.168.0.0/16
+
+are reserved ip addresses for local usage. 
+A user can connect local devices on them and communicate through it.
+For the VPN it would be useful because you can run a server for example, where you keep your storage.
+Like a personal cloud storage.
+
+That way, you can connect through VPN to your local area network and have access to all of them devices.
+
+The route redirects these reserved IP addresses to the router gateway (145.116.128.1), where it is then decided, if the traffic goes 
+to another local device or out to the internet.
+
+c)
+my IP address is 145.116.128.31/22
+VPN runs on a machine with IP address 198.51.100.42
+VPN uses the network 10.50.9.0/24
+
+3. 10.50.9.0/24 dev tap0 proto kernel scope link src 10.50.9.60
+4. 10.0.0.0/8 via 145.116.128.1 dev wlp3s0
+5. 172.16.0.0/12 via 145.116.128.1 dev wlp3s0
+6. 192.168.0.0/16 via 145.116.128.1 dev wlp3s0
+
+Since 4,5 and 6 redirect traffic from their ips to the gateway 145.116.128.1, the rule 3 takes care of further processing.
+It means that whatever is in the scope of 10.50.9.60 
+that within the network segment of the device communication is allowed through this link.
+
+The ip of the interface tap0 is 10.50.9.60 so everything with a src address like this _____...
+
+d)
+8. 131.174.117.20 via 145.116.128.1 dev wlp3s0
+It redirects traffic from 131.174.117.20 to 145.116.128.1 (gateway)
+So from our dhcp server to our gateway.
+
+If it's not present, we don't get service from our dhcp server but we probably get it from someone else..
+
+e)
+10. 198.51.100.42 via 145.116.128.1 dev wlp3s0
+It routes our VPN via our router gateway.
+Without it, the VPN would be cut from the outside web.
+
+f)
+Connecting on the same machine where the VPN is running means we ...
+
+> Search some tunneling tutorials online
+
+
+

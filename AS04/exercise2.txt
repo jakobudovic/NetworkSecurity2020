@@ -19,3 +19,13 @@ ssh: connect to host lilo.science.ru.nl port 22: Connection refused
 client: fatal: failed to establish ssh session (2)
 
 
+Default route:
+root@netsec-kali:~# ip route show
+default via 10.0.2.2 dev eth0 proto dhcp metric 100 
+default via 172.21.152.1 dev eth1 proto static metric 101 
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 metric 100 
+172.21.152.0/23 dev eth1 proto kernel scope link src 172.21.152.101 metric 101 
+
+
+
+
