@@ -4,7 +4,7 @@
 
 <username>@lilo.science.ru.nl
 
-sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+root sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
 
 
 err1:
@@ -27,5 +27,12 @@ default via 172.21.152.1 dev eth1 proto static metric 101
 172.21.152.0/23 dev eth1 proto kernel scope link src 172.21.152.101 metric 101 
 
 
+Anyway, i eventually managed to reset my password (admin denied). Connected in lilo finally.
 
+iptables -t <table> -L 
 
+iptables-save
+
+I couldn't get that to work... I'm sorry. And noone provided me with ip tables so I had to skip this.
+Id' love to see the result and the explanation tho, because i don't really get the routing tables, gateways etc.
+I know that the "more precise one" that matches our IP will take care of routing but that's it pretty much.
