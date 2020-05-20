@@ -102,7 +102,11 @@ Iptables on lilo (original saved in iptables.txt):
 obtained with 
 $ sudo iptables-save > iptables.txt
 
-TABLE1:
+The first 3 rows are I guess default rules (TABLE1)? I don't know, I'll just focus on other 3.
+"It means that the default policy for those three chains is ACCEPT, so all packets (in, out, and forwarded through your system) are 'accepted' (go through), and not firewalled (rejected or dropped)."
+I got it... [0:0] means from all networks to all networks.
+
+TABLE1 (filter):
 *filter
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
@@ -111,10 +115,30 @@ TABLE1:
 -A INPUT -p icmp -m icmp --icmp-type 5 -j DROP
 -A INPUT -i eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-The first 3 rows are I guess default rules? I don't know, I'll just focus on other 3.
-"It means that the default policy for those three chains is ACCEPT, so all packets (in, out, and forwarded through your system) are 'accepted' (go through), and not firewalled (rejected or dropped)."
+INPUT, FORWARD, OUTPUT; all default on accept.
+Rule1:
+append to INPUT chain for tcp protocol, matchname (-m) tcp, destination port which matches 22, match connection state NEW and ESTABLISHED.
+Then jump to ACCEPT aka accept them.
 
+Rule2:
+match all icmp protocol packets whose type is 5, these packets need to DROP! Protocol 5 is Redirect. So we don't want redirects.
+ICMP types:
+Type 0 — Echo Reply.
+Type 1 — Unassigned.
+Type 2 — Unassigned.
+Type 3 — Destination Unreachable.
+Type 4 — Source Quench (Deprecated)
+Type 5 — Redirect.
+Type 6 — Alternate Host Address (Deprecated)
+Type 7 — Unassigned
 
+Rule3:
+All imputs on interface eth0 with RELATED and ESTABLISHED states are accepted.
+
+--------------------------------------------------------------------------------
+
+Lecture 1:42:00
+TABLE2 (nat):
 *nat
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]
@@ -126,9 +150,38 @@ The first 3 rows are I guess default rules? I don't know, I'll just focus on oth
 -A sshuttle-12300 -d 127.0.0.1/32 -p tcp -j RETURN
 -A sshuttle-12300 -p tcp -m ttl ! --ttl-eq 42 -j REDIRECT --to-ports 12300
 
+By default we accept prerouting, all inputs, postrouting and output traffic.
+
+Rule1:
+In prerouting we jump to sshuttle-12300.
+
+Rule2:
+all outgoing traffic should go through sshuttle-12300
+
+Rule3:
+sshuttle-12300 traffic deistined for 127.0.0.1/32 via protocol TCP should get returned.
+
+Rule4:
+sshuttle-12300 traffic with protool tcp where TTL (time to live?) equals 42 should get redirected to port 12300
+
+
+so in the PREROUTING phase we always jump to sshuttle-12300 which is our ssh port.
+Same holds when we have outgoing traffic. All redirected to sshuttle-12300.
+Ahh I think I got it.
+Rule 3 and 4 are after first routing decision? 
+Pretty much 3 says if the traffic is destined for our local machine (in this case Lilo server?),
+it should RETURN the packet?
+4 says that any traffic 
+
+--------------------------------------------------------------------------------
+TABLE3 (mangle):
 *mangle
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
+
+We said we don't need to know the raw and mangle routing tables soooo skipp :) (1:45:35)
+Here, everything is accepted anyway. Why do we even need this? Why so many talbes and not just one big. 
+For better readability? Anything else?
