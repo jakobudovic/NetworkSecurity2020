@@ -171,7 +171,7 @@ Ahh I think I got it.
 Rule 3 and 4 are after first routing decision? 
 Pretty much 3 says if the traffic is destined for our local machine (in this case Lilo server?),
 it should RETURN the packet?
-4 says that any traffic 
+4 says that any tcp traffic with some matchname that I couldn't figure out what means, gets redirected to port 12300 and back to the network. 
 
 --------------------------------------------------------------------------------
 TABLE3 (mangle):
