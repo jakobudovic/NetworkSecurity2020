@@ -167,3 +167,8 @@ I guess by forgetting NEW default firewals, the ipv6 messages would use the OLD 
 They should add new default routes for ipv6.
 NAT protects local machines from outside world. They are kind of annonymous on the outside, hiding behind the router's outside ip.
 
+--
+
+So, 
+a) "Revert the IP and transport headers of the embedded IP packet to their original form" is about changing the embedded IPs and 
+c) "Modify the destination IP address of the outer IP header to be the same as the source IP address of the embedded packet after translation." is about the IP of the ICMP Error message itself?

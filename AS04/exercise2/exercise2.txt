@@ -1,0 +1,134 @@
+-r [USERNAME@]ADDR[:PORT], --remote [USERNAME@]ADDR[:PORT]
+                        ssh hostname (and optional username) of remote
+                        sshuttle server
+
+<username>@lilo.science.ru.nl
+
+root sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+
+err1:
+root@netsec-kali:~# sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+judovic@lilo.science.ru.nl's password: 
+Permission denied, please try again.
+
+err2:
+root@netsec-kali:~# sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+ssh: connect to host lilo.science.ru.nl port 22: Connection refused
+client: fatal: failed to establish ssh session (2)
+
+
+Default route:
+root@netsec-kali:~# ip route show
+default via 10.0.2.2 dev eth0 proto dhcp metric 100 
+default via 172.21.152.1 dev eth1 proto static metric 101 
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 metric 100 
+172.21.152.0/23 dev eth1 proto kernel scope link src 172.21.152.101 metric 101 
+
+
+Anyway, i eventually managed to reset my password (admin denied). Connected in lilo finally.
+
+iptables -t <table> -L 
+
+iptables-save
+
+-----------
+I managed to get the IP tables after days... (see below):
+
+Checking listening ports on MY machine:
+
+kali@netsec-kali:~$ sudo netstat -plnt
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.1:12300         0.0.0.0:*               LISTEN      18955/python3       
+tcp6       0      0 :::1716                 :::*                    LISTEN      917/kdeconnectd  
+
+Second line gets added after connecting to lilo.
+Using tcp, listening on port 12300.
+18955/python3 I don't know what this part is. PID is process id so it's probably just a unique identifier.
+
+---------------------------------------------------------------------------------------------------
+
+My listening ports before and after running lilo command added 5th row (my listening porst are in files netstat_before.txt
+and netstat_after.txt). The difference can be seen in the picture diff.png
+
+Pretty much this row got added:
+tcp        0      0 localhost:12300         0.0.0.0:*               LISTEN     
+
+We are listening on port 12300 with tcp protocol to connect to Lilo..
+
+But i guess we were supposed to check what ports are open/listening on lilo. I saved that in netstat_lilo.txt too keep this
+file short.
+
+/* --------------------------------------------
+RECAP:
+
+Rules consist of 
+- packet criteria (what you match on is the tcp on port x or udp on port y) and
+- target (what do you do once the packet criteria matches)
+
+
+Packet needs to be (at the end) either 
+- accepted
+- dropped
+- returned
+- rejected? (additional;  reset, host unreachable message...)
+
+Filtered - dropped, nmap doesn't see a reply
+Closed - when it's rejected with reset or icp-port-unreachable (firewall is telling you that)
+
+Lecture 1:29:00 explains how to read rules:
+
+modules are for stateful behaviour, like tcp with SYN, SYN_ACK...:
+- NEW (first time seeing it)
+- ESTABLISHED (after new)
+- RELATED (related to an established one)
+
+NEW is not necessary if your OUTPUT policy is ACCEPT.
+If you accept anything outgoing, you don't need a NEW module/rules.
+
+To accept the messages from the outside you need a NEW rule.
+
+---------------------------------------------- */
+
+These are the ports listening on lilo:
+
+tcp        0      0 localhost:6463          0.0.0.0:*               LISTEN     
+tcp        0      0 localhost:12300         0.0.0.0:*               LISTEN     
+tcp6       0      0 [::]:1716               [::]:*                  LISTEN    
+
+We see 12300 port again, via which lilo is communicating with our 12300 tcp port.
+
+Iptables on lilo (original saved in iptables.txt):
+obtained with 
+$ sudo iptables-save > iptables.txt
+
+TABLE1:
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -p tcp -m tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -m icmp --icmp-type 5 -j DROP
+-A INPUT -i eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+The first 3 rows are I guess default rules? I don't know, I'll just focus on other 3.
+"It means that the default policy for those three chains is ACCEPT, so all packets (in, out, and forwarded through your system) are 'accepted' (go through), and not firewalled (rejected or dropped)."
+
+
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:sshuttle-12300 - [0:0]
+-A PREROUTING -j sshuttle-12300
+-A OUTPUT -j sshuttle-12300
+-A sshuttle-12300 -d 127.0.0.1/32 -p tcp -j RETURN
+-A sshuttle-12300 -p tcp -m ttl ! --ttl-eq 42 -j REDIRECT --to-ports 12300
+
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]

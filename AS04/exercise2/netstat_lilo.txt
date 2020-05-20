@@ -1,0 +1,41 @@
+kali@netsec-kali:~$ netstat -l
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 localhost:6463          0.0.0.0:*               LISTEN     
+tcp        0      0 localhost:12300         0.0.0.0:*               LISTEN     
+tcp6       0      0 [::]:1716               [::]:*                  LISTEN     
+udp6       0      0 [::]:1716               [::]:*                             
+raw6       0      0 [::]:ipv6-icmp          [::]:*                  7          
+raw6       0      0 [::]:ipv6-icmp          [::]:*                  7          
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node   Path
+unix  2      [ ACC ]     STREAM     LISTENING     12544    /run/systemd/journal/io.systemd.journal
+unix  2      [ ACC ]     STREAM     LISTENING     396803   /run/user/1000/vscode-f2138f4e-1.44.0-shared.sock
+unix  2      [ ACC ]     STREAM     LISTENING     48405    /run/user/1000/kdeinit5__0
+unix  2      [ ACC ]     STREAM     LISTENING     15632    @/tmp/.X11-unix/X0
+unix  2      [ ACC ]     STREAM     LISTENING     48422    /run/user/1000/klauncherqvacrs.1.slave-socket
+unix  2      [ ACC ]     STREAM     LISTENING     396327   /run/user/1000/vscode-f2138f4e-1.44.0-main.sock
+unix  2      [ ACC ]     STREAM     LISTENING     489606   /tmp/discord.sock
+unix  2      [ ACC ]     STREAM     LISTENING     397123   /run/user/1000/vscode-git-ipc-baf7040228d871f5a3d4c18d003cc2154e015dc2.sock
+unix  2      [ ACC ]     STREAM     LISTENING     17572    @/tmp/.ICE-unix/723
+unix  2      [ ACC ]     STREAM     LISTENING     26191    /run/user/1000/keyring/control
+unix  2      [ ACC ]     STREAM     LISTENING     13664    /run/dbus/system_bus_socket
+unix  2      [ ACC ]     STREAM     LISTENING     15633    /tmp/.X11-unix/X0
+unix  2      [ ACC ]     STREAM     LISTENING     13668    /run/pcscd/pcscd.comm
+unix  2      [ ACC ]     STREAM     LISTENING     17074    /run/user/1000/systemd/private
+unix  2      [ ACC ]     STREAM     LISTENING     17081    /run/user/1000/bus
+unix  2      [ ACC ]     STREAM     LISTENING     17083    /run/user/1000/gnupg/S.dirmngr
+unix  2      [ ACC ]     STREAM     LISTENING     17085    /run/user/1000/gnupg/S.gpg-agent.browser
+unix  2      [ ACC ]     STREAM     LISTENING     17087    /run/user/1000/gnupg/S.gpg-agent.extra
+unix  2      [ ACC ]     STREAM     LISTENING     17089    /run/user/1000/gnupg/S.gpg-agent.ssh
+unix  2      [ ACC ]     STREAM     LISTENING     17091    /run/user/1000/gnupg/S.gpg-agent
+unix  2      [ ACC ]     STREAM     LISTENING     17093    /run/user/1000/pk-debconf-socket
+unix  2      [ ACC ]     STREAM     LISTENING     17095    /run/user/1000/pulse/native
+unix  2      [ ACC ]     STREAM     LISTENING     490965   /run/user/1000/discord-ipc-0
+unix  2      [ ACC ]     STREAM     LISTENING     10968    /run/systemd/private
+unix  2      [ ACC ]     STREAM     LISTENING     17414    /tmp/ssh-sQKsdj46orO6/agent.723
+unix  2      [ ACC ]     STREAM     LISTENING     17573    /tmp/.ICE-unix/723
+unix  2      [ ACC ]     STREAM     LISTENING     17525    @/tmp/dbus-FshdAeRPxA
+unix  2      [ ACC ]     STREAM     LISTENING     10986    /run/systemd/fsck.progress
+unix  2      [ ACC ]     STREAM     LISTENING     10998    /run/systemd/journal/stdout
+unix  2      [ ACC ]     SEQPACKET  LISTENING     11004    /run/udev/control
