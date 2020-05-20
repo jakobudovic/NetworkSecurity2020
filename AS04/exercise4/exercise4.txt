@@ -100,6 +100,8 @@ packet.
 
 -
 I didn't really understand the section 5 about hairpinning...:
+Packet exits the same interface that he came in. Aka u-turn.
+
 
 "When forwarding a hairpinned ICMP Error message, the NAT
 device MUST translate the destination IP address of the

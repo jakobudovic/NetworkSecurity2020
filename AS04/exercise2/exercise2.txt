@@ -160,10 +160,12 @@ all outgoing traffic should go through sshuttle-12300
 
 Rule3:
 sshuttle-12300 traffic deistined for 127.0.0.1/32 via protocol TCP should get returned.
+127.0.0.1 is localhost loopback. Whatever is destined for it from sshuttle gets returned. AKA it makes a loopback.
 
 Rule4:
 sshuttle-12300 traffic with protool tcp where TTL (time to live?) equals 42 should get redirected to port 12300
-
+Sshuttle uses ttl to make its trafic. All but it's own traffic is redirected to port 12300 
+(I'm not 100% sure about this rule to be honest... I can't think of a practical example for it?)
 
 so in the PREROUTING phase we always jump to sshuttle-12300 which is our ssh port.
 Same holds when we have outgoing traffic. All redirected to sshuttle-12300.
