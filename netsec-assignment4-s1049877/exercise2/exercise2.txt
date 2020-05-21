@@ -1,0 +1,189 @@
+-r [USERNAME@]ADDR[:PORT], --remote [USERNAME@]ADDR[:PORT]
+                        ssh hostname (and optional username) of remote
+                        sshuttle server
+
+<username>@lilo.science.ru.nl
+
+root sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+
+err1:
+root@netsec-kali:~# sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+judovic@lilo.science.ru.nl's password: 
+Permission denied, please try again.
+
+err2:
+root@netsec-kali:~# sshuttle -r judovic@lilo.science.ru.nl:22 0/0 --exclude lilo.science.ru.nl 
+ssh: connect to host lilo.science.ru.nl port 22: Connection refused
+client: fatal: failed to establish ssh session (2)
+
+
+Default route:
+root@netsec-kali:~# ip route show
+default via 10.0.2.2 dev eth0 proto dhcp metric 100 
+default via 172.21.152.1 dev eth1 proto static metric 101 
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 metric 100 
+172.21.152.0/23 dev eth1 proto kernel scope link src 172.21.152.101 metric 101 
+
+
+Anyway, i eventually managed to reset my password (admin denied). Connected in lilo finally.
+
+iptables -t <table> -L 
+
+iptables-save
+
+-----------
+I managed to get the IP tables after days... (see below):
+
+Checking listening ports on MY machine:
+
+kali@netsec-kali:~$ sudo netstat -plnt
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.1:12300         0.0.0.0:*               LISTEN      18955/python3       
+tcp6       0      0 :::1716                 :::*                    LISTEN      917/kdeconnectd  
+
+Second line gets added after connecting to lilo.
+Using tcp, listening on port 12300.
+18955/python3 I don't know what this part is. PID is process id so it's probably just a unique identifier.
+
+---------------------------------------------------------------------------------------------------
+
+My listening ports before and after running lilo command added 5th row (my listening porst are in files netstat_before.txt
+and netstat_after.txt). The difference can be seen in the picture diff.png
+
+Pretty much this row got added:
+tcp        0      0 localhost:12300         0.0.0.0:*               LISTEN     
+
+We are listening on port 12300 with tcp protocol to connect to Lilo..
+
+But i guess we were supposed to check what ports are open/listening on lilo. I saved that in netstat_lilo.txt too keep this
+file short.
+
+/* --------------------------------------------
+RECAP:
+
+Rules consist of 
+- packet criteria (what you match on is the tcp on port x or udp on port y) and
+- target (what do you do once the packet criteria matches)
+
+
+Packet needs to be (at the end) either 
+- accepted
+- dropped
+- returned
+- rejected? (additional;  reset, host unreachable message...)
+
+Filtered - dropped, nmap doesn't see a reply
+Closed - when it's rejected with reset or icp-port-unreachable (firewall is telling you that)
+
+Lecture 1:29:00 explains how to read rules:
+
+modules are for stateful behaviour, like tcp with SYN, SYN_ACK...:
+- NEW (first time seeing it)
+- ESTABLISHED (after new)
+- RELATED (related to an established one)
+
+NEW is not necessary if your OUTPUT policy is ACCEPT.
+If you accept anything outgoing, you don't need a NEW module/rules.
+
+To accept the messages from the outside you need a NEW rule.
+
+---------------------------------------------- */
+
+These are the ports listening on lilo:
+
+tcp        0      0 localhost:6463          0.0.0.0:*               LISTEN     
+tcp        0      0 localhost:12300         0.0.0.0:*               LISTEN     
+tcp6       0      0 [::]:1716               [::]:*                  LISTEN    
+
+We see 12300 port again, via which lilo is communicating with our 12300 tcp port.
+
+Iptables on lilo (original saved in iptables.txt):
+obtained with 
+$ sudo iptables-save > iptables.txt
+
+The first 3 rows are I guess default rules (TABLE1)? I don't know, I'll just focus on other 3.
+"It means that the default policy for those three chains is ACCEPT, so all packets (in, out, and forwarded through your system) are 'accepted' (go through), and not firewalled (rejected or dropped)."
+I got it... [0:0] means from all networks to all networks.
+
+TABLE1 (filter):
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -p tcp -m tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -m icmp --icmp-type 5 -j DROP
+-A INPUT -i eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+INPUT, FORWARD, OUTPUT; all default on accept.
+Rule1:
+append to INPUT chain for tcp protocol, matchname (-m) tcp, destination port which matches 22, match connection state NEW and ESTABLISHED.
+Then jump to ACCEPT aka accept them.
+
+Rule2:
+match all icmp protocol packets whose type is 5, these packets need to DROP! Protocol 5 is Redirect. So we don't want redirects.
+ICMP types:
+Type 0 — Echo Reply.
+Type 1 — Unassigned.
+Type 2 — Unassigned.
+Type 3 — Destination Unreachable.
+Type 4 — Source Quench (Deprecated)
+Type 5 — Redirect.
+Type 6 — Alternate Host Address (Deprecated)
+Type 7 — Unassigned
+
+Rule3:
+All imputs on interface eth0 with RELATED and ESTABLISHED states are accepted.
+
+--------------------------------------------------------------------------------
+
+Lecture 1:42:00
+TABLE2 (nat):
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:sshuttle-12300 - [0:0]
+-A PREROUTING -j sshuttle-12300
+-A OUTPUT -j sshuttle-12300
+-A sshuttle-12300 -d 127.0.0.1/32 -p tcp -j RETURN
+-A sshuttle-12300 -p tcp -m ttl ! --ttl-eq 42 -j REDIRECT --to-ports 12300
+
+By default we accept prerouting, all inputs, postrouting and output traffic.
+
+Rule1:
+In prerouting we jump to sshuttle-12300.
+
+Rule2:
+all outgoing traffic should go through sshuttle-12300
+
+Rule3:
+sshuttle-12300 traffic deistined for 127.0.0.1/32 via protocol TCP should get returned.
+127.0.0.1 is localhost loopback. Whatever is destined for it from sshuttle gets returned. AKA it makes a loopback.
+
+Rule4:
+sshuttle-12300 traffic with protool tcp where TTL (time to live?) equals 42 should get redirected to port 12300
+Sshuttle uses ttl to make its trafic. All but it's own traffic is redirected to port 12300 
+(I'm not 100% sure about this rule to be honest... I can't think of a practical example for it?)
+
+so in the PREROUTING phase we always jump to sshuttle-12300 which is our ssh port.
+Same holds when we have outgoing traffic. All redirected to sshuttle-12300.
+Ahh I think I got it.
+Rule 3 and 4 are after first routing decision? 
+Pretty much 3 says if the traffic is destined for our local machine (in this case Lilo server?),
+it should RETURN the packet?
+4 says that any tcp traffic with some matchname that I couldn't figure out what means, gets redirected to port 12300 and back to the network. 
+
+--------------------------------------------------------------------------------
+TABLE3 (mangle):
+*mangle
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+
+We said we don't need to know the raw and mangle routing tables soooo skipp :) (1:45:35)
+Here, everything is accepted anyway. Why do we even need this? Why so many talbes and not just one big. 
+For better readability? Anything else?

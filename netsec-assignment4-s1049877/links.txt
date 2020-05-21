@@ -1,0 +1,17 @@
+https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
+
+iptables examples:
+http://www.sns.ias.edu/~jns/files/iptables_ruleset
+
+ICMP Types:
+    Type 0 — Echo Reply.
+    Type 1 — Unassigned.
+    Type 2 — Unassigned.
+    Type 3 — Destination Unreachable.
+    Type 4 — Source Quench (Deprecated)
+    Type 5 — Redirect.
+    Type 6 — Alternate Host Address (Deprecated)
+    Type 7 — Unassigned.
+
+Delete a rule:
+iptables -D INPUT/FORWARD/OUPUT <num>

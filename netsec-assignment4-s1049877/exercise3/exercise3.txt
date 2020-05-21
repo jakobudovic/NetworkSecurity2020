@@ -1,0 +1,51 @@
+a)
+All the traffic get's picked up by the VPN rules 1 and 2. It can't even reach the rule 7.
+It's the "trick" of the vpn.
+
+
+b)
+
+10.0.0.0/8
+172.16.0.0/12
+and
+192.168.0.0/16
+
+are reserved ip addresses for local usage. 
+A user can connect local devices on them and communicate through it.
+For the VPN it would be useful because you can run a server for example, where you keep your storage.
+Like a personal cloud storage.
+
+The route redirects these reserved IP addresses to the router gateway (145.116.128.1), where it is then decided, if the traffic goes 
+to another local device or out to the internet, through the interface wlp3s0.
+
+
+c)
+my IP address is 145.116.128.31/22
+VPN runs on a machine with IP address 198.51.100.42
+VPN uses the network 10.50.9.0/24
+
+3. 10.50.9.0/24 dev tap0 proto kernel scope link src 10.50.9.60
+4. 10.0.0.0/8 via 145.116.128.1 dev wlp3s0
+5. 172.16.0.0/12 via 145.116.128.1 dev wlp3s0
+6. 192.168.0.0/16 via 145.116.128.1 dev wlp3s0
+
+rule 3 is just more specific than rule 4. 
+IT's the vpn traffic and scope link src 10.50.9.60 ip ist our ip inside the vpn.
+
+
+d)
+8. 131.174.117.20 via 145.116.128.1 dev wlp3s0
+We reach our dhcp server via our gateway.
+
+If it's not present, we don't get service from our dhcp server.
+
+e)
+10. 198.51.100.42 via 145.116.128.1 dev wlp3s0
+It routes our VPN "requests" via our router gateway.
+Without it, we wouldn't be able to reach our VPN network.
+
+f)
+No it does not get tunneled since it's running on the same server, uses same ip -> the rule 10 applies.
+It gets routed through the router gateway.
+
+
