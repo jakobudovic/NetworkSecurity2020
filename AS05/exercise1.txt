@@ -1,0 +1,29 @@
+Lecture about DNS amplification: 58:30
+
+LAN network
+203.0.113.0/24
+
+gateway’s internal IP address:
+203.0.113.1
+
+gateway’s external IP address:
+198.51.100.78
+
+We need to filter spoofed IP addresses ("ingres and an egress filtering")
+So I will only allow outgoing traffic for the IPs that I already know belong to our LAN.
+Hmm since I got my address space given already, which is 203.0.113.0/24, I can only allow outgoing traffic for them.
+Since DNS (usually) uses UDP as its protocol, I could simply block all UDP outgoing traffic by default and then add a rule 
+which allows our LAN addresses to still send the requests out.
+But if i block all outgoing traffic, my LAN would be cut out the net.
+Therefore I will just try to block all udp outgoing traffic for the IPs NOT matching the 203.0.113.0/24
+
+TABLE (filter):
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A OUTPUT -p udp -s ! 203.0.113.0/24 -d 203.0.113.1 --ctstate NEW, ESTABLISHED, RELATED -j REJECT 
+
+I don't think --cstate part is neccessary here since since we target all of them therfore we don't need to specify that.
+I was googling how I could match all other IPs except the 203.0.113.0/24 but I couldn't find anzthing besides putting "!"
+in front.

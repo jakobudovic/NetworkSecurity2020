@@ -1,0 +1,84 @@
+Attaciking: proctorio.com
+
+This is not relating to the question completely but firstly, you need to prevend the real server to reply faster than you.
+We would do that by using DDoS attack on the server.
+Of course invoking us to send the answer can be done in many other ways, e.g. clicking on a link in a fake e-mail.
+
+
+a) Lecture 1:00:00
+How would you ensure that you can predict the queries that the cache is going to produce, and how
+would you ensure that your answers will be accepted (i.e. pass the bailiwick check)? Describe the
+setup and/or process.
+
+bailiwick check (1997) - reject ADDITIONAL info of the reply if the DNS server is not authorized to answer for the domain.
+
+With DNS spoofing.
+
+/*
+1. setup your DNS server for your webisite. Whenever someone requests the ip for your website, you answer.
+2. Leave the ANSWER and the AUTHORITY sections "legit" as they're supposed to be, in ADDITIONAL part, you add poisoned info you want.
+3. Therefore the victim caches the false ip for the website they might use in the future (bank.something etc). 
+*/
+
+^This was solved by bailiwick check.. :(
+
+Now, we would have to race with the legitimate server.
+QID - querry ID, it's randomized. 16bits (65535 possibilities)
+
+1. Attacker starts the race: he lures the victim to his website, 
+2. On the website we include html elements, e.g. a picture, where src would lead them to other website. These links can be subdomains.
+3. Attacker now knows when the request to all the subdomains was made, can start a race.
+4. Attacker sends a bunch of answers with differend QIDs and hopes to be faster than the victim's desired website DNS server.
+5. In the AUTHORITY section it's stated the authoritative domain, so the ADDITIONAL sections becomes valid.
+6. You poison the website with your spoofed IP in the ADDITIONAL section (like befores)
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+b)
+QID uses 16 bits, so 65535 possibilities.
+That means with 1 query it's 1 over 65535. (1/65535 = 0,0015%)
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+c)
+Source port adds up to not only 16 but 32 bits to guess for an attacker.
+We would have to guess client's source port (can be anything). DNS server uses port 53. The reply needs to return to the same port.
+4294967296 possibilities. So 1 / 4294967296 =  2.3283064e-12%
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+d)
+0x20 randomization (capital letters)
+guess: www.proctorio.com (15 letters in total)
+2^32 * 2^15 = 2^47
+So chance is 1 in a 2^47
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+e) Lecture 1:15:00
+Birthday attacks 
+You would send more than 1 request with spoofed QID and source port.
+But you need to send them fast enough. They all need to be sent faster than the first reply is received.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+f)
+With a passive MitM, he can simply just see (not modify) the queries.
+By seeing the requested querry, he can also see the source port and QID which completely eliminates the security implemented with randomization.
+When seeing a request you can immediately send back a poisoned reply.
+You can easily become MitM (ARP spoofing, Sniff Wi-fi, be an ISP or an administrator of the network)
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+g)
+An active MitM can alter the packets passing through him, meaining he can append his message in the ADDITIONAL section of the 
+DNS reply going back to host.
+The reply has a legitimate authoritative DNS server therefore the ADDITIONAL section remains valid. 
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
