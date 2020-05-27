@@ -22,7 +22,7 @@ TABLE (filter):
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
 :OUTPUT ACCEPT [0:0]
--A OUTPUT -p udp -s ! 203.0.113.0/24 -d 203.0.113.1 --ctstate NEW, ESTABLISHED, RELATED -j REJECT 
+-A FORWARD -p udp ! -s 203.0.113.0/24 -d 203.0.113.1 -j REJECT 
 
 I don't think --cstate part is neccessary here since since we target all of them therfore we don't need to specify that.
 I was googling how I could match all other IPs except the 203.0.113.0/24 but I couldn't find anzthing besides putting "!"

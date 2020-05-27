@@ -1,0 +1,318 @@
+
+a) 
+$ sudo openvpn openvpn-science.ovpn
+U: judovic
+P: 
+
+
+b)
+https://gitlab.science.ru.nl/cncz/openvpn/raw/master/openvpn-science.ovpn
+
+client
+proto tcp - protocol we're using
+dev tun - Use a dynamic tun device with the name tun
+ca /etc/ssl/certs/DigiCert_Assured_ID_Root_CA.pem - ca is Certificate Authority (CA) aka the root certificate in .pem format
+remote-cert-tls server - This is a useful security option for clients, to ensure that the host they  con‐
+                            nect to is a designated server.  Or the other way around; for a server to verify
+                            that only hosts with a client certificate can connect.
+                            It is  equivalent to --remote-cert-ku --re‐
+                            mote-cert-eku "TLS Web Server Authentication"
+auth-user-pass - Query  management  channel  for  private key password and --auth-user-pass user‐
+                    name/password.  Only query the management channel for  inputs  which  ordinarily
+                    would have been queried from the console. basicaly require password to authenticate the user.
+cipher AES-256-CBC - Encrypt data channel packets with cipher algorithm alg, in our case AES-256-CBC. Default is BF-CBC and is no longer recommended.
+verify-x509-name openvpn.science.ru.nl name -  Accept connections only if a host's X.509 name is equal to  name. Basically we say what host we want to use.
+                                                Last argumennt "name" is to match a subject RDN
+auth SHA256 - Authenticate  data  channel  packets  and (if enabled) tls-auth control channel, using attribute we specified (SHA256). 
+            Default is SHA1, we use SHA256.
+comp-lzo - server side. Deprecated flag. It's a compression. We use 'adaptive' which is default. We could also use 'yes' or 'no'.
+verb 3 - default 1. Goes up to 11. Each level shows all info from the previous levels. Level 3 is recommended if you want a good summary of what's hap‐
+                        pening without being swamped by output. 1-4 is normal usage range. 0 means no output. etc.
+remote openvpn.science.ru.nl 443 - "--remote host [port] [proto]"
+                                    our host is openvpn.science.ru.nl on port 443.
+                                    When  used  in  TCP  mode, --remote will act as a filter, rejecting connections
+                                    from any host which does not match host.
+
+
+
+
+c)
+With vpn ip route show:
+0.0.0.0/1 via 131.174.224.129 dev tun0 
+default via 10.0.2.2 dev eth0 proto dhcp metric 100 -
+default via 172.21.152.1 dev eth1 proto static metric 101 -
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 metric 100 -
+128.0.0.0/1 via 131.174.224.129 dev tun0 
+131.174.16.141 via 10.0.2.2 dev eth0 
+131.174.224.128/27 dev tun0 proto kernel scope link src 131.174.224.153 
+172.21.152.0/23 dev eth1 proto kernel scope link src 172.21.152.101 metric 101 -
+
+Without vpn ip route show:
+default via 10.0.2.2 dev eth0 proto dhcp metric 100 
+default via 172.21.152.1 dev eth1 proto static metric 101 
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 metric 100 
+172.21.152.0/23 dev eth1 proto kernel scope link src 172.21.152.101 metric 101 
+
+WITH VPN:
+
+kali@netsec-kali:/etc/openvpn$ traceroute brightspace.ru.nl
+traceroute to brightspace.ru.nl (34.250.225.157), 30 hops max, 60 byte packets
+ 1  openvpn-gw.science.ru.nl (131.174.224.129)  8.139 ms  16.706 ms  16.591 ms
+ 2  dr-huyg.net.science.ru.nl (131.174.16.129)  16.508 ms  16.101 ms  15.906 ms
+ 3  192.168.10.6 (192.168.10.6)  15.635 ms  15.410 ms  15.013 ms
+ 4  192.168.23.25 (192.168.23.25)  14.786 ms  14.554 ms  14.285 ms
+ 5  192.168.23.17 (192.168.23.17)  82.063 ms  81.879 ms  81.735 ms
+ 6  e11-0-5-1117.nm001a-jnx-01.surf.net (145.145.8.81)  81.479 ms  10.824 ms  12.761 ms
+ 7  ae25.zl001a-jnx-01.surf.net (145.145.176.60)  22.418 ms  22.321 ms  22.347 ms
+ 8  lo0-2.asd002a-jnx-01-sn7-internet.surf.net (145.145.128.2)  22.372 ms  22.360 ms  22.350 ms
+ 9  amazon-router1.peering.surf.net (145.145.166.129)  22.280 ms  22.318 ms  22.310 ms
+10  * * *
+11  * * *
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  * * *
+20  * * *
+21  * * *
+22  * * *
+23  * * *
+24  * * *
+25  * * *
+26  * * *
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+
+kali@netsec-kali:/etc/openvpn$ traceroute www.google.com
+traceroute to www.google.com (172.217.168.196), 30 hops max, 60 byte packets
+ 1  openvpn-gw.science.ru.nl (131.174.224.129)  14.041 ms  16.539 ms  16.540 ms
+ 2  dr-huyg.net.science.ru.nl (131.174.16.129)  16.556 ms  16.540 ms  16.526 ms
+ 3  192.168.10.6 (192.168.10.6)  16.510 ms  16.494 ms  20.931 ms
+ 4  192.168.23.25 (192.168.23.25)  16.382 ms  16.365 ms  16.350 ms
+ 5  192.168.23.17 (192.168.23.17)  20.856 ms  20.839 ms  20.823 ms
+ 6  e11-0-5-1117.nm001a-jnx-01.surf.net (145.145.8.81)  16.304 ms  14.334 ms  13.019 ms
+ 7  ae25.zl001a-jnx-01.surf.net (145.145.176.60)  26.461 ms ae22.ut015b-jnx-01.surf.net (145.145.176.12)  16.325 ms  16.307 ms
+ 8  lo0-2.asd001b-jnx-01-sn7-internet.surf.net (145.145.128.4)  16.310 ms  16.225 ms  16.292 ms
+ 9  74.125.51.222 (74.125.51.222)  16.247 ms  16.215 ms  16.232 ms
+10  108.170.241.225 (108.170.241.225)  26.394 ms 108.170.241.193 (108.170.241.193)  16.243 ms 108.170.241.225 (108.170.241.225)  26.386 ms
+11  108.170.227.3 (108.170.227.3)  26.409 ms  26.386 ms 108.170.227.9 (108.170.227.9)  26.346 ms
+12  ams16s32-in-f4.1e100.net (172.217.168.196)  22.665 ms  19.412 ms  19.444 ms
+ 
+kali@netsec-kali:/etc/openvpn$ traceroute www.cs.ru.nl
+traceroute to www.cs.ru.nl (131.174.9.227), 30 hops max, 60 byte packets
+ 1  openvpn-gw.science.ru.nl (131.174.224.129)  17.262 ms  33.984 ms  33.998 ms
+ 2  dr-huyg.net.science.ru.nl (131.174.16.129)  33.989 ms  33.977 ms  33.967 ms     // huygens building
+ 3  * * *
+ 4  * * *
+ 5  * * *
+ 6  * * *
+ 7  * * *
+ 8  * * *
+ 9  * * *
+10  * * *
+11  * * *
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  * * *
+20  * * *
+21  * * *
+22  * * *
+23  * * *
+24  * * *
+25  * * *
+26  * * *
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+kali@netsec-kali:/etc/openvpn$ traceroute openvpn.science.ru.nl
+traceroute to openvpn.science.ru.nl (131.174.16.141), 30 hops max, 60 byte packets
+ 1  10.0.2.2 (10.0.2.2)  1.721 ms  1.310 ms  1.267 ms
+ 2  192.168.0.1 (192.168.0.1)  1.806 ms  2.216 ms  2.251 ms
+ 3  ip-213-124-162-1.ip.prioritytelecom.net (213.124.162.1)  28.820 ms  29.028 ms  28.459 ms
+ 4  ip-80-113-24-201.ip.prioritytelecom.net (80.113.24.201)  16.406 ms  22.544 ms  23.906 ms
+ 5  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  25.178 ms  25.135 ms  26.530 ms    // amsterdam
+ 6  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  25.009 ms  8.143 ms  8.552 ms
+ 7  nl-ams04a-ri3-ae51-0.aorta.net (213.51.64.194)  8.428 ms * *                            // root
+ 8  xe-2-1-5.jnr01.asd001a.surf.net (145.145.166.89)  36.983 ms  36.783 ms  42.444 ms
+ 9  ae24.ut015b-jnx-01.surf.net (145.145.176.41)  103.991 ms  104.523 ms ae21.zl001a-jnx-01.surf.net (145.145.176.46)  105.368 ms
+10  e11-0-2-0.nm001a-jnx-01.surf.net (145.145.6.29)  107.275 ms  107.299 ms  104.404 ms     // nijmegen
+11  ru-router.customer.surf.net (145.145.8.82)  13.431 ms  13.371 ms  11.355 ms
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  * * *
+20  * * *
+21  * * *
+22  * * *
+23  * * *
+24  * * *
+25  * * *
+26  * * *
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+WITHOUT VPN:
+
+kali@netsec-kali:/etc/openvpn$ traceroute brightspace.ru.nl
+traceroute to brightspace.ru.nl (34.250.225.157), 30 hops max, 60 byte packets
+ 1  10.0.2.2 (10.0.2.2)  1.558 ms  1.472 ms  1.420 ms
+ 2  192.168.0.1 (192.168.0.1)  2.186 ms  2.197 ms  2.095 ms
+ 3  ip-213-124-162-1.ip.prioritytelecom.net (213.124.162.1)  32.609 ms  15.782 ms  32.591 ms
+ 4  ip-80-113-24-201.ip.prioritytelecom.net (80.113.24.201)  7.416 ms  7.204 ms  7.355 ms
+ 5  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  7.387 ms  7.411 ms  8.208 ms
+ 6  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  7.332 ms  8.785 ms  9.274 ms
+ 7  nl-srk03a-ri1-ae51-0.aorta.net (213.51.64.198)  38.362 ms  28.566 ms  28.753 ms
+ 8  52.46.167.242 (52.46.167.242)  28.949 ms  29.823 ms  32.435 ms
+ 9  52.93.113.30 (52.93.113.30)  34.005 ms 52.93.113.18 (52.93.113.18)  33.878 ms  33.788 ms
+10  52.93.0.47 (52.93.0.47)  36.090 ms 52.93.0.59 (52.93.0.59)  34.531 ms 52.93.0.157 (52.93.0.157)  33.895 ms
+11  * * *
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  150.222.240.148 (150.222.240.148)  41.222 ms 150.222.241.151 (150.222.241.151)  80.532 ms 150.222.240.172 (150.222.240.172)  34.222 ms
+17  * * *
+18  * * *
+19  * * *
+20  * * *
+21  150.222.240.42 (150.222.240.42)  57.845 ms 150.222.241.208 (150.222.241.208)  46.227 ms 52.93.101.34 (52.93.101.34)  45.880 ms
+22  * * 52.93.7.75 (52.93.7.75)  62.385 ms
+23  52.93.6.220 (52.93.6.220)  50.911 ms * 52.93.6.144 (52.93.6.144)  41.323 ms
+24  52.93.101.17 (52.93.101.17)  30.513 ms 52.93.101.33 (52.93.101.33)  29.720 ms 52.93.101.39 (52.93.101.39)  64.063 ms
+25  52.93.101.12 (52.93.101.12)  36.092 ms 52.93.101.30 (52.93.101.30)  29.777 ms 52.93.101.50 (52.93.101.50)  41.028 ms
+26  52.93.7.63 (52.93.7.63)  38.139 ms 52.93.7.55 (52.93.7.55)  124.687 ms 52.93.7.61 (52.93.7.61)  123.908 ms
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+ali@netsec-kali:~$ traceroute www.google.com
+traceroute to www.google.com (172.217.20.68), 30 hops max, 60 byte packets
+ 1  10.0.2.2 (10.0.2.2)  0.219 ms  0.168 ms  0.150 ms
+ 2  192.168.0.1 (192.168.0.1)  4.819 ms  8.280 ms  23.565 ms
+ 3  ip-213-124-162-1.ip.prioritytelecom.net (213.124.162.1)  41.464 ms  42.353 ms  42.739 ms
+ 4  ip-80-113-24-201.ip.prioritytelecom.net (80.113.24.201)  29.581 ms  29.403 ms  29.359 ms
+ 5  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  29.478 ms  29.499 ms  30.476 ms
+ 6  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  29.323 ms  9.452 ms  5.521 ms
+ 7  nl-ams14a-ri1-ae51-0.aorta.net (213.51.64.186)  9.554 ms  7.584 ms  8.342 ms
+ 8  10ge-1-4.cr1.ams2.baseip.com (213.46.182.22)  7.776 ms  7.984 ms  7.244 ms
+ 9  * * *
+10  142.250.224.130 (142.250.224.130)  7.112 ms 108.170.236.224 (108.170.236.224)  6.978 ms  7.277 ms
+11  108.170.241.237 (108.170.241.237)  7.469 ms  7.535 ms 108.170.235.133 (108.170.235.133)  7.589 ms
+12  ams15s33-in-f4.1e100.net (172.217.20.68)  6.590 ms 216.239.42.103 (216.239.42.103)  8.215 ms ams15s33-in-f4.1e100.net (172.217.20.68)  7.327 ms
+
+
+kali@netsec-kali:/etc/openvpn$ traceroute www.cs.ru.nl
+traceroute to www.cs.ru.nl (131.174.9.227), 30 hops max, 60 byte packets
+ 1  10.0.2.2 (10.0.2.2)  0.403 ms  0.299 ms  0.270 ms
+ 2  192.168.0.1 (192.168.0.1)  1.210 ms  1.624 ms  1.380 ms
+ 3  ip-213-124-162-1.ip.prioritytelecom.net (213.124.162.1)  36.509 ms  58.122 ms  41.961 ms
+ 4  ip-80-113-24-201.ip.prioritytelecom.net (80.113.24.201)  6.319 ms  7.960 ms  9.155 ms
+ 5  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  27.581 ms  40.690 ms  39.921 ms
+ 6  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  77.599 ms  18.249 ms  26.237 ms
+ 7  nl-ams04a-ri3-ae51-0.aorta.net (213.51.64.194)  34.677 ms  37.836 ms  45.544 ms
+ 8  xe-2-1-5.jnr01.asd001a.surf.net (145.145.166.89)  45.480 ms  45.486 ms  45.466 ms
+ 9  ae24.ut015b-jnx-01.surf.net (145.145.176.41)  45.452 ms ae21.zl001a-jnx-01.surf.net (145.145.176.46)  45.432 ms  13.823 ms
+10  e11-0-2-0.nm001a-jnx-01.surf.net (145.145.6.29)  13.787 ms  13.712 ms  15.282 ms
+11  ru-router.customer.surf.net (145.145.8.82)  10.539 ms  10.546 ms  11.925 ms
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  * * *
+20  * * *
+21  * * *
+22  * * *
+23  * * *
+24  * * *
+25  * * *
+26  * * *
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+
+
+kali@netsec-kali:/etc/openvpn$ traceroute openvpn.science.ru.nl
+traceroute to openvpn.science.ru.nl (131.174.16.141), 30 hops max, 60 byte packets
+ 1  10.0.2.2 (10.0.2.2)  0.292 ms  0.233 ms  0.160 ms
+ 2  192.168.0.1 (192.168.0.1)  1.212 ms  1.156 ms  1.637 ms
+ 3  ip-213-124-162-1.ip.prioritytelecom.net (213.124.162.1)  31.506 ms  42.368 ms  40.886 ms
+ 4  ip-80-113-24-201.ip.prioritytelecom.net (80.113.24.201)  9.994 ms  11.464 ms  16.488 ms
+ 5  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  20.917 ms  24.595 ms  24.171 ms
+ 6  asd-tr0021-cr101-be112-2.core.as33915.net (213.51.7.92)  21.545 ms  13.803 ms  14.208 ms
+ 7  nl-ams04a-ri3-ae51-0.aorta.net (213.51.64.194)  36.242 ms  37.882 ms  35.756 ms
+ 8  xe-2-1-5.jnr01.asd001a.surf.net (145.145.166.89)  15.988 ms  16.140 ms  16.286 ms
+ 9  ae24.ut015b-jnx-01.surf.net (145.145.176.41)  16.939 ms ae21.zl001a-jnx-01.surf.net (145.145.176.46)  21.080 ms  21.078 ms
+10  e11-0-2-0.nm001a-jnx-01.surf.net (145.145.6.29)  19.618 ms  20.039 ms  27.659 ms
+11  ru-router.customer.surf.net (145.145.8.82)  10.771 ms  10.709 ms  10.479 ms
+12  * * *
+13  * * *
+14  * * *
+15  * * *
+16  * * *
+17  * * *
+18  * * *
+19  * * *
+20  * * *
+21  * * *
+22  * * *
+23  * * *
+24  * * *
+25  * * *
+26  * * *
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+
+d)
+
+I can see with the VPN on, there is less hops visible.
+Traceroute can not resolve the names/information about them. 
+
+Secondly, we always go thorugh:
+e11-0-5-1117.nm001a-jnx-01.surf.net (145.145.8.81)
+ae25.zl001a-jnx-01.surf.net (145.145.176.60) and
+lo0-2.asd002a-jnx-01-sn7-internet.surf.net (145.145.128.2)
+
+Which I guess would be our remote VPN server that we tunnel through.
+
+e)
+Other services:
+A SSH server
+A Webserver
+A FTP server
+Another VPN server
+
+Because you would need to resolve your own IP.
+We can see that in the case of tracerouting to the VPN. It's configured for you not to end up in the loop, because you are basically requesting yourself.
+It's hard to explain it myself but TA was very helpful and friendly and tried to explain it to me, why we see only 2 hops when tracerouting www.cs.ru.nl,
+but many when tracerouting the vpn itself.
