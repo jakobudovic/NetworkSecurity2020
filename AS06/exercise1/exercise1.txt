@@ -1,0 +1,55 @@
+Bssid (Basic service set identifiers) of the network:
+00:0f:c9:0c:f7:93
+
+Essid (Extended Service Set Identifier)
+
+cd ~/Documents/git/NetworkSecurity2020/AS06/exercise1
+
+We got a 266MB file with common passphrases in GDict_v2.txt.
+We use the command:
+
+aircrack-ng -w GDict_v2.txt -b 00:0f:c9:0c:f7:93 handshake.cap
+
+We got the output:
+                           KEY FOUND! [ <OC@(OL4 ]
+So the key is:
+<OC@(OL4
+
+------------------------------------------------------------------------------
+
+Full output:
+                               Aircrack-ng 1.6 
+
+      [00:00:13] 28010/21582449 keys tested (2148.43 k/s) 
+
+      Time left: 2 hours, 47 minutes, 14 seconds                 0.13%
+
+                           KEY FOUND! [ <OC@(OL4 ]
+
+
+      Master Key     : A2 3E 89 CC EF EC 87 9A BF AC 4D 39 C2 80 31 C4 
+                       BA 90 75 29 06 E4 D3 C7 19 C5 BD A1 32 8A 42 FE 
+
+      Transient Key  : 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+                       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+                       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+                       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+
+      EAPOL HMAC     : 9F 32 CA 85 04 F8 71 A1 B6 FA D2 87 FF 68 B1 69 
+
+
+SSID: netsec-wpa
+
+https://www.youtube.com/watch?v=RnfXiAYqsuc
+
+Go to:
+Edit > preferences > protocols > IEEE 820.11 > Edit decryption keys > Add New under "wpa-pwd" and enter phrase: 
+"<OC@(OL4:netsec-wpa"
+This is in format password:SSID
+
+After that refresh cap package under View > Reload (Ctrl+R) and enter the filter DHCP.
+
+
+After observing the package for some time I have noticed the same BSS Id under the fild with that name, that was also given to us.
+(00:0f:c9:0c:f7:93). It can also be written in: Allnet_0c:f7:93
+This is our receiver address.
