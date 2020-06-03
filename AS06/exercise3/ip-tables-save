@@ -1,0 +1,4 @@
+default via 172.21.152.1 dev eth1 proto static metric 100 
+default via 10.0.2.2 dev eth0 proto dhcp metric 101 
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15 metric 101 
+172.21.152.0/23 dev eth1 proto kernel scope link src 172.21.152.101 metric 100
