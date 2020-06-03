@@ -1,0 +1,40 @@
+wg0:
+
+$ ping -I wg0 10.90.42.1
+PING 10.90.42.1 (10.90.42.1) from 10.90.42.2 wg0: 56(84) bytes of data.
+64 bytes from 10.90.42.1: icmp_seq=1 ttl=64 time=0.627 ms
+64 bytes from 10.90.42.1: icmp_seq=2 ttl=64 time=0.605 ms
+64 bytes from 10.90.42.1: icmp_seq=3 ttl=64 time=0.572 ms
+64 bytes from 10.90.42.1: icmp_seq=4 ttl=64 time=1.26 ms
+64 bytes from 10.90.42.1: icmp_seq=5 ttl=64 time=0.803 ms
+64 bytes from 10.90.42.1: icmp_seq=6 ttl=64 time=0.829 ms
+64 bytes from 10.90.42.1: icmp_seq=7 ttl=64 time=0.569 ms
+64 bytes from 10.90.42.1: icmp_seq=8 ttl=64 time=0.883 ms
+64 bytes from 10.90.42.1: icmp_seq=9 ttl=64 time=1.01 ms
+64 bytes from 10.90.42.1: icmp_seq=10 ttl=64 time=0.861 ms
+64 bytes from 10.90.42.1: icmp_seq=11 ttl=64 time=1.13 ms
+64 bytes from 10.90.42.1: icmp_seq=12 ttl=64 time=0.527 ms
+64 bytes from 10.90.42.1: icmp_seq=13 ttl=64 time=1.29 ms
+64 bytes from 10.90.42.1: icmp_seq=14 ttl=64 time=1.16 ms
+^C
+--- 10.90.42.1 ping statistics ---
+14 packets transmitted, 14 received, 0% packet loss, time 13165ms
+rtt min/avg/max/mdev = 0.527/0.866/1.292/0.258 ms
+
+------------------------------------------------------------------------------------------
+eth1:
+
+$ ping -I wg0 10.90.42.1
+PING 10.90.42.1 (10.90.42.1) from 10.90.42.2 wg0: 56(84) bytes of data.
+64 bytes from 10.90.42.1: icmp_seq=1 ttl=64 time=0.476 ms
+64 bytes from 10.90.42.1: icmp_seq=2 ttl=64 time=0.656 ms
+64 bytes from 10.90.42.1: icmp_seq=3 ttl=64 time=0.552 ms
+64 bytes from 10.90.42.1: icmp_seq=4 ttl=64 time=0.683 ms
+64 bytes from 10.90.42.1: icmp_seq=5 ttl=64 time=0.998 ms
+64 bytes from 10.90.42.1: icmp_seq=6 ttl=64 time=0.578 ms
+64 bytes from 10.90.42.1: icmp_seq=7 ttl=64 time=1.14 ms
+64 bytes from 10.90.42.1: icmp_seq=8 ttl=64 time=0.578 ms
+^C
+--- 10.90.42.1 ping statistics ---
+8 packets transmitted, 8 received, 0% packet loss, time 7103ms
+rtt min/avg/max/mdev = 0.476/0.707/1.137/0.218 ms
