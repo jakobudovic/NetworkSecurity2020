@@ -40,8 +40,6 @@ Full output:
 
 SSID: netsec-wpa
 
-https://www.youtube.com/watch?v=RnfXiAYqsuc
-
 Go to:
 Edit > preferences > protocols > IEEE 820.11 > Edit decryption keys > Add New under "wpa-pwd" and enter phrase: 
 "<OC@(OL4:netsec-wpa"
@@ -53,3 +51,8 @@ After that refresh cap package under View > Reload (Ctrl+R) and enter the filter
 After observing the package for some time I have noticed the same BSS Id under the fild with that name, that was also given to us.
 (00:0f:c9:0c:f7:93). It can also be written in: Allnet_0c:f7:93
 This is our receiver address.
+
+Sources:
+http://www.aircrack-ng.org/doku.php?id=cracking_wpa (given)
+https://wiki.wireshark.org/HowToDecrypt802.11
+https://www.youtube.com/watch?v=RnfXiAYqsuc
