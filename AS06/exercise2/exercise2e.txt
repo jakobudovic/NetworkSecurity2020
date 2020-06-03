@@ -1,0 +1,9 @@
+A countermeasure I found would be:
+HSTS is an HTTP security mechanism that allows web sites to declare themselves as accessible only via secure connections
+and for users to direct user agents (UAs), or your browser, to interact with web sites only over a secure connection.
+
+In practice you can see that very often, when you can not acces a certain site if you use http over https.
+Sometimes you get a notification/warning that the site is not secure an other times the site just won't load.
+If the website is configured properly, you can even be redirected from http to https.
+
+In short, it FORCES HTTPS.

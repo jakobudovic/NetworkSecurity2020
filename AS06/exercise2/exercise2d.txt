@@ -1,0 +1,13 @@
+SSLStrip is a type of MITM attack that forces a victim's browser into communicating with an adversary in plain-text 
+over HTTP, and the adversary proxies the modified content from an HTTPS server. 
+To do this, SSLStrip is "stripping" https:// URLs and turning them into http:// URLs.
+
+Source: https://security.stackexchange.com/questions/41988/how-does-sslstrip-work
+
+It receives the traffic via firewall, because we gave it an explicit rule to traffic all HTTPS traffic going to the port 
+80 to our desired port (also IP forwarding needed to be enabled before).
+
+I would say it rewrites the paket because it uses another protocol - HTTPS not HTTP.
+I mean the firewall will rewrite the destination port so, yes, in this sense it gets rewritten. 
+
+SSLstrip downgrades HTTPS to HTTP via redirection mappings. 

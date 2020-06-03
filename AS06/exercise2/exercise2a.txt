@@ -1,0 +1,25 @@
+Kali 1 > Settings > Machine > Network > Adapter 1 > Advanced > Cable connected checkbox
+
+-sn 
+-sL (no port scan after)
+-Pn (no ping)
+
+Network: 172.21.152.101/23
+a) Command:
+nmap -sn 172.21.152.101/23
+
+Gateway, one host is me, the other host's ip is: 172.21.153.10
+172.21.152.1 (Gateway), 172.21.152.101 (me), other host (172.21.153.10) - 
+I assume because after I turn the peer 1 off, It doesn't show anymore.
+
+
+Full output:
+kali@netsec-kali:~/Documents/git/NetworkSecurity2020/AS06$ nmap -sn 172.21.152.101/23
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-06-03 07:47 CEST
+Nmap scan report for 172.21.152.1
+Host is up (0.00084s latency).
+Nmap scan report for 172.21.152.101
+Host is up (0.00099s latency).
+Nmap scan report for 172.21.153.10
+Host is up (0.0048s latency).
+Nmap done: 512 IP addresses (3 hosts up) scanned in 4.00 seconds

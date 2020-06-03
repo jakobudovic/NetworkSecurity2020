@@ -1,0 +1,27 @@
+
+First I enabled ip forwarding
+sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+
+Add prerouting rule to redirect traffic to port 12345
+$ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 12345
+
+Default port was 10000 (I think, but I changed it to 12345)
+
+Now I run my ssl script from the correct folder (given) using flags for correct port, only loging the POST traffic,...
+
+$ python2 ~/sslstrip/sslstrip.py -p -l 12345 
+
+In wireshark, again, I can filter most of the data away with !arp flag or even:
+http.request.method == "POST"
+To get just the POST packets and inspect those.
+
+See picture POST.png for the 2 captured packets going to the cs.ru.nl, which are also logged in the sslstrip.log file.
+
+There we can se that the username is "admin" (bad), and the password is saved in the FLAG section:
+username=admin&password=FLAG{HackThePlanet-FayL}
+
+Flag: HackThePlanet-FayL
+
+Disclaimer, for some reason it did not let me capture the traffic in wireshark in frist try so some flags might be different from
+the screenshot. 
+
