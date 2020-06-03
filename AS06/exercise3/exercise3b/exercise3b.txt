@@ -1,0 +1,25 @@
+Try:
+ping -I wg0 10.90.42.1
+It works:
+$ ping -I wg0 10.90.42.1
+PING 10.90.42.1 (10.90.42.1) from 10.90.42.2 wg0: 56(84) bytes of data.
+64 bytes from 10.90.42.1: icmp_seq=1 ttl=64 time=0.613 ms
+64 bytes from 10.90.42.1: icmp_seq=2 ttl=64 time=1.61 ms
+64 bytes from 10.90.42.1: icmp_seq=3 ttl=64 time=1.02 ms
+64 bytes from 10.90.42.1: icmp_seq=4 ttl=64 time=0.838 ms
+64 bytes from 10.90.42.1: icmp_seq=5 ttl=64 time=0.821 ms
+^C
+--- 10.90.42.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4010ms
+rtt min/avg/max/mdev = 0.613/0.980/1.614/0.341 ms
+
+----
+
+Deleting a route I made by accident too specific
+sudo ip route del 10.90.42.1 dev wg0 proto kernel scope link src 10.90.42.2
+
+wg.txt is the output of the $ sudo wg command
+
+Shellscript: script.sh
+
+Configuration file: wg0.conf

@@ -1,4 +1,0 @@
-Deleting a route I made by accident too specific
-ip route del 172.31.16.0/20 dev eth1  proto kernel  scope link  src 172.31.23.44
-sudo ip route del 10.90.42.1 via 10.90.42.2 dev wg0
-sudo ip route del 10.90.42.1 dev wg0 proto kernel scope link src 10.90.42.2

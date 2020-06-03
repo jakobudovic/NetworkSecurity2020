@@ -15,10 +15,10 @@ $ wg pubkey < privatekey > publickey
 Or do it all at once:
 $ wg genkey | tee privatekey | wg pubkey > publickey
 
-privatekey:
+privatekey, also in file privatekey:
 mJkpsDnaLUK+xZTE48X9Bwonq6mEb+YJCAxXZVnVx2g=
 
-publickey:
+publickey, also in file publickey:
 NcgZOPeRV6IciZrdiIhbCT/YXxBwfF8xw7l0C3Qbtkw=
 
 
