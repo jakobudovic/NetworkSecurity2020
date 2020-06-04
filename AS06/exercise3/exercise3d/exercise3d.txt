@@ -1,0 +1,12 @@
+ping -I wg0 10.90.42.1
+
+10.90.42.1 is pinging the outside device in the net 131.174.16.146 (see eth1)
+But actually we are getting the requests on our Kali VM.
+We need to forward them in the routing table to the outside world and then get them back 
+(but getting back is done automatically, because of the src address of the netsec-2 - we just need to forward it?)
+
+sudo iptables -t nat -L
+
+
+used this:
+ip r del default via 172.21.152.1

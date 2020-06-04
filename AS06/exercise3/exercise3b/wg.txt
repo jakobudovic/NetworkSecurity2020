@@ -9,3 +9,4 @@ peer: kK2V2Bp/JJsCqCbZF7G+OHXhbc7llj8IZoibkViER1Y=
   allowed ips: 10.90.42.0/24
   latest handshake: 7 seconds ago
   transfer: 4.28 KiB received, 4.35 KiB sent
+  
