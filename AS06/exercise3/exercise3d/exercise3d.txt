@@ -8,9 +8,18 @@ We need to forward them in the routing table to the outside world and then get t
 sudo iptables -t nat -L
 
 
-root@netsec-kali:~# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
 This rule allowed pings to leave our NAT. 
+But then i applied more specific rule:
+# iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.90.42.0/24
+
+with a source 10.90.42.0/24, but also 10.90.42.1 works.
+
+Other commands:
+# iptables -t nat -D POSTROUTING 1
+# iptables -t nat -L -v --line-number
+
 
 ip a add dev v
 
@@ -18,3 +27,19 @@ ip a add dev v
 used this:
 ip r add default via 172.21.152.1
 ip r del default via 172.21.152.1
+
+-------------------------------------------------------------------------------------------
+
+Help: https://www.cyberciti.biz/faq/linux-ip-command-examples-usage-syntax/#
+Add a new route
+The syntax is:
+ip route add {NETWORK/MASK} via {GATEWAYIP}
+ip route add {NETWORK/MASK} dev {DEVICE}
+ip route add default {NETWORK/MASK} dev {DEVICE}
+ip route add default {NETWORK/MASK} via {GATEWAYIP}
+
+Add a plain route to network 192.168.1.0/24 via gateway 192.168.1.254:
+ip route add 192.168.1.0/24 via 192.168.1.254
+
+To route all traffic via 192.168.1.254 gateway connected via eth0 network interface:
+ip route add 192.168.1.0/24 dev eth0
