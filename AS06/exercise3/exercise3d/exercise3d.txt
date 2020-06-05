@@ -31,6 +31,7 @@ ip r del default via 172.21.152.1
 -------------------------------------------------------------------------------------------
 
 Help: https://www.cyberciti.biz/faq/linux-ip-command-examples-usage-syntax/#
+and: https://askubuntu.com/questions/466445/what-is-masquerade-in-the-context-of-iptables
 Add a new route
 The syntax is:
 ip route add {NETWORK/MASK} via {GATEWAYIP}

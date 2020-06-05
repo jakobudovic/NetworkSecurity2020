@@ -1,0 +1,10 @@
+interface: wg0
+  public key: 5wTs+U09hmOd9mYn3OgKga/ecHdBvGN8D7ES0pjppVM=
+  private key: (hidden)
+  listening port: 12345
+
+peer: kK2V2Bp/JJsCqCbZF7G+OHXhbc7llj8IZoibkViER1Y=
+  endpoint: 172.21.152.79:12345
+  allowed ips: 10.90.42.0/24
+  latest handshake: 2 seconds ago
+  transfer: 369.02 KiB received, 332.89 KiB sent
