@@ -15,7 +15,7 @@ rtt min/avg/max/mdev = 0.613/0.980/1.614/0.341 ms
 
 ----
 
-Deleting a route I made by accident too specific
+Deleting a route I made by accident "too specific"
 sudo ip route del 10.90.42.1 dev wg0 proto kernel scope link src 10.90.42.2
 
 wg.txt is the output of the $ sudo wg command
