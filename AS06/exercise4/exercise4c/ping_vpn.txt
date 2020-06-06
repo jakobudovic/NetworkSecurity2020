@@ -1,0 +1,14 @@
+PING google.com (172.217.19.206) 56(84) bytes of data.
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=1 ttl=63 time=9.27 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=2 ttl=63 time=8.41 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=3 ttl=63 time=14.4 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=4 ttl=63 time=9.43 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=5 ttl=63 time=9.47 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=6 ttl=63 time=14.5 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=7 ttl=63 time=9.51 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=8 ttl=63 time=14.8 ms
+64 bytes from ams16s31-in-f14.1e100.net (172.217.19.206): icmp_seq=9 ttl=63 time=7.29 ms
+
+--- google.com ping statistics ---
+9 packets transmitted, 9 received, 0% packet loss, time 8019ms
+rtt min/avg/max/mdev = 7.285/10.782/14.772/2.751 ms
