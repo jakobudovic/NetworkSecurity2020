@@ -1,3 +1,14 @@
+I remember we had a rule 10 in previous assignment - assignment 4. 
+There was a rule preventing sending tunneled packets back to vpn with one specific rule.
+Here I added a similar rule:
+198.51.100.42 via 10.0.2.2 dev eth0 
+
+So whatever gets sent to our VPN on IP 198.51.100.42 it gets put on interface eth0 via 10.0.2.2 (LAN gateway)
+
+
+------------------------------------------------------------------------------------------------------------
+
+
 netsec-peer2 is 172.21.152.79
 Port used: 6789
 Kali VM: client, connects to netsec-peer2 VPN

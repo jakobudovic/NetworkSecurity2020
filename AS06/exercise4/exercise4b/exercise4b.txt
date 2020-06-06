@@ -1,0 +1,50 @@
+$ wg-quick up  wg1
+[#] ip link add wg1 type wireguard
+[#] wg setconf wg1 /dev/fd/63
+[#] ip -4 address add 10.90.84.1/24 dev wg1
+[#] ip link set mtu 1420 up dev wg1
+[#] ip -4 route add 0.0.0.0/0 dev wg1 table 51820
+[#] ip -4 rule add not fwmark 51820 table 51820
+[#] ip -4 rule add table main suppress_prefixlength 0
+[#] sysctl -q net.ipv4.conf.all.src_valid_mark=1
+[#] iptables-restore -n
+[#] iptables -A FORWARD -i wg1 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE;
+
+-----------------------------
+
+https://www.linode.com/docs/networking/vpn/set-up-wireguard-vpn-on-ubuntu/
+
+See my extern interface, access to internet:
+ip -o -4 route show to default | awk '{print $5}'
+
+$ sudo nano /etc/sysctl.conf
+And uncomment line:
+net.ipv4.ip_forward=1
+$ sudo sysctl -p
+-----------------------------
+
+$ sudo wg show wg1
+interface: wg1
+  public key: NDNn2JQVqpseA+uU3ixKNSZF10PBsa+Hvssqy16liGI=
+  private key: (hidden)
+  listening port: 6789
+  fwmark: 0xca6c
+
+peer: Kv8dfbldzmRW7/c16NZ+bVPKkDXL0Z4qL1bCKhq7xHA=
+  endpoint: 172.21.152.79:6789
+  allowed ips: 0.0.0.0/0
+  latest handshake: 1 minute, 23 seconds ago
+  transfer: 284 B received, 6.14 KiB sent
+
+
+-----------------------------
+Assignment4: 
+10. 198.51.100.42 via 145.116.128.1 dev wlp3s0
+where 198.51.100.42 is a VPN,
+145.116.128.1 is router gateway, default.
+
+10.0.2.2
+ip route add 198.51.100.42 via 10.0.2.2 dev eth0
+
+-----------------------------
+
