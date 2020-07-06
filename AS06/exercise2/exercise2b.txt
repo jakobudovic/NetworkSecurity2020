@@ -5,7 +5,7 @@ Arpspoofing gateway:
 sudo arpspoof -i eth1 172.21.152.1
 
 After arpspoofing both host and gateway I saw DNS requests to the follwing sites to the google DNS server (1.1.1.1.)
-I believe (I also use that as mz backup DNS server...):
+I believe (I also use that as my backup DNS server...):
 vortex.data.microsoft.com and other subdomains: 
 asimov.data.microsoft.com 
 geo.data.microsoft.com 
@@ -18,4 +18,3 @@ I saved exercise in .pcapng because there was no option for .cap
 I also included the arp replies but one can simply filter them using !arp flag.
 I also had to "unlock" the file for reading using command:
 sudo chmod +r exercise2b.pcapng
-

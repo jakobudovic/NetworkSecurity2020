@@ -313,6 +313,7 @@ A FTP server
 Another VPN server
 
 Because you would need to resolve your own IP.
-We can see that in the case of tracerouting to the VPN. It's configured for you not to end up in the loop, because you are basically requesting yourself.
-It's hard to explain it myself but TA was very helpful and friendly and tried to explain it to me, why we see only 2 hops when tracerouting www.cs.ru.nl,
-but many when tracerouting the vpn itself.
+We can see that in the case of tracerouting to the VPN. It's configured for you not to end up in the loop, 
+because you are basically requesting yourself.
+It's hard to explain it myself but TA was very helpful and friendly and tried to explain it to me, 
+why we see only 2 hops when tracerouting www.cs.ru.nl, but many when tracerouting the vpn itself.

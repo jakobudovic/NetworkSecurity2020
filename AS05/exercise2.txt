@@ -59,7 +59,7 @@ e) Lecture 1:15:00
 Birthday attacks (Kaminsky attack)
 You would send more than 1 request with spoofed QID and source port.
 But you need to send them fast enough. They all need to be sent faster than the first reply is received.
-
+200 - default size of the querry queue.
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 
